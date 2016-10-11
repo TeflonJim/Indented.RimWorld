@@ -39,7 +39,7 @@ function Get-RWMod {
                                       URL,
                                       TargetVersion,
                                       @{n='Path';e={ $modPath }} |
-                        Add-Member -TypeName 'Indented.RW.Mod' -PassThru
+                        Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
 
                     $regex = 'v(?:ersion:?)? *((?:\d+\.){1,}\d+)'
                     if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {

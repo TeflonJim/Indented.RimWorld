@@ -5,8 +5,8 @@ function Open-RWDirectory {
         [ValidateSet('Game', 'GameMods', 'WorkshopMods', 'UserSettings')]
         [String]$Name,
 
-        [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FromMod')]
-        [PSObject]$Mod
+        [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
+        [PSObject]$ModInformation
     )
 
     begin {
@@ -21,8 +21,8 @@ function Open-RWDirectory {
     }
 
     process {
-        if ($pscmdlet.ParameterSetName -eq 'FromMod') {
-            Start-Process $Mod.Path
+        if ($pscmdlet.ParameterSetName -eq 'FromModInformation') {
+            Start-Process $ModInformation.Path
         }
     }
 }
