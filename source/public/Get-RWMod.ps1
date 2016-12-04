@@ -1,9 +1,26 @@
 function Get-RWMod {
+    # .SYNOPSIS
+    #   Get the mods available to RimWorld.
+    # .DESCRIPTION
+    #   Get-RWMod searches the games mod path and the workshop mod path for mods.
+    # .INPUTS
+    #   System.String
+    # .OUTPUTS
+    #   Indented.RimWorld.ModInformation (System.Management.Automation.PSObject)
+    # .NOTES
+    #   Author: Chris Dent
+    #
+    #   Change log:
+    #     11/10/2016 - Chris Dent - Created.
+
     [CmdletBinding(DefaultParameterSetName = 'ByID')]
+    [OutputType([System.Management.Automation.PSObject])]
     param(
+        # The ID of a mod. The ID is the folder name which may match the name of the mod as seen in RimWorld.
         [Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = 'ByID')]
         [String]$ID,
 
+        # The name of the mod as seen in RimWorld.
         [Parameter(Position = 1, ParameterSetName = 'ByName')]
         [String]$Name = '*'
     )

@@ -5,34 +5,33 @@ function Get-RWModDef {
     #   Get the Defs from the mod.
     #
     #   This function attempts to convert first-level elements from the Def XML to an object. As properties in objects must be unique this function will also flag duplicates.
-    # .PARAMETER ModName
-    #   Get Defs from the specified mod name.
-    # .PARAMETER ModInformation
-    #   Accepts an output pipeline from Get-RWMod.
     # .INPUTS
-    #   Indented.RimWorld.Mod
+    #   Indented.RimWorld.ModInformation
     #   System.String
     # .OUTPUTS
-    #   Indented.RimWorld.Def
+    #   Indented.RimWorld.DefInformation (System.Management.Automation.PSObject)
     # .EXAMPLE
     #   Get-RWMod SomeMod | Get-RWModDef
     # .NOTES
     #   Author: Chris Dent
-    #   Last modified: 15/06/2014
     #
     #   Change log:
     #     15/06/2014 - Created
 
     [CmdletBinding(DefaultParameterSetName = 'ByModName')]
+    [OutputType([System.Management.Automation.PSObject])]
     param(
+        # Get Defs from the specified mod name.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
         [ValidateNotNullOrEmpty()]
         [String]$ModName,
 
+        # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
         [ValidateScript( { $_.PSObject.TypeNames -contains 'Indented.RimWorld.ModInformation' } )]
         $ModInformation,
 
+        # Only show warnings
         [Switch]$WarningsOnly
     )
 
@@ -57,15 +56,17 @@ function Get-RWModDef {
                         foreach ($xElement in $xDocument.Elements()) {
                             foreach ($defXElement in $xElement.Elements()) {
                                 if ($defXElement.Element('defName').Value) {
-                                    [PSCustomObject]@{
-                                        DefName          = $defXElement.Element('defName').Value
-                                        DefType          = $defXElement.Name
-                                        ID               = '{0}\{1}' -f $defXElement.Name, $defXElement.Element('defName').Value
-                                        ModName          = $ModInformation.Name
-                                        Def              = $defXElement | ConvertFromXElement
-                                        DefContainerType = $xElement.Name
-                                        Path             = $_.FullName
-                                    } | Add-Member -TypeName 'Indented.RimWorld.DefInformation' -PassThru
+                                    if (-not $WarningsOnly) {
+                                        [PSCustomObject]@{
+                                            DefName          = $defXElement.Element('defName').Value
+                                            DefType          = $defXElement.Name
+                                            ID               = '{0}\{1}' -f $defXElement.Name, $defXElement.Element('defName').Value
+                                            ModName          = $ModInformation.Name
+                                            Def              = $defXElement | ConvertFromXElement
+                                            DefContainerType = $xElement.Name
+                                            Path             = $_.FullName
+                                        } | Add-Member -TypeName 'Indented.RimWorld.DefInformation' -PassThru
+                                    }
                                 }
                             }
                         }

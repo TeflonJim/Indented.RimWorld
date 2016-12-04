@@ -1,4 +1,18 @@
 function ConvertFromXElement {
+    # .SYNOPSIS
+    #   Internal use only.
+    # .DESCRIPTION
+    #   Offload conversion of an XElement to a PSObject.
+    # .INPUTS
+    #   System.Xml.Linq.XElement
+    # .OUTPUTS
+    #   System.Management.Automation.PSObject
+    # .NOTES
+    #   Author: Chris Dent
+    #
+    #   Change log:
+    #     11/10/2016 - Chris Dent - Created.
+    
     param(
         [Parameter(ValueFromPipeline = $true)]
         [System.Xml.Linq.XElement]$XElement

@@ -3,14 +3,6 @@ function Compare-RWModDef {
     #   Compares Defs across mods.
     # .DESCRIPTION
     #   Compare-RWModDef shows conflicting defNames across RimWorld mods.
-    # .PARAMETER SubjectModName
-    #   The mod to test.
-    # .PARAMETER ObjectModName
-    #   The mod to compare with. If no mod name is supplied the subject is compared with all mods.
-    # .PARAMETER SubjectModInformation
-    #   Accepts an output pipeline from Get-RimWorldMod.
-    # .PARAMETER IncludeCore
-    #   By default Core is excluded from the comparison; overriding core is expected behaviour. Conflicts with Core can be displayed using this parameter.
     # .INPUTS
     #   Indented.RimWorld.Mod
     #   System.String
@@ -35,20 +27,26 @@ function Compare-RWModDef {
     #     15/06/2014 - Created
 
     [CmdletBinding(DefaultParameterSetName = 'ByModName')]
+    [OutputType([System.Management.Automation.PSObject])]
     param(
+        # The mod to test.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
         [String]$SubjectModName,
 
+        # The mod to compare with. If no mod name is supplied the subject is compared with all mods.
         [Parameter(Position = 2, ParameterSetName = 'ByModName')]
         [Parameter(ParameterSetName = 'FromModInformation')]
         [String]$ObjectModName = "*",
 
+        # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
         [ValidateScript( { $_.PSObject.TypeNames -contains 'Indented.RimWorld.ModInformation' } )]
         $SubjectModInformation,
 
+        # By default Core is excluded from the comparison; overriding core is expected behaviour. Conflicts with Core can be displayed using this parameter.
         [Switch]$IncludeCore,
 
+        # Attempts to determine override ordering using the mod load order.
         [Switch]$UseLoadOrder
     )
 

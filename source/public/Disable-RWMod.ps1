@@ -1,24 +1,52 @@
 function Disable-RWMod {
-    [CmdletBinding(DefaultParameterSetName = 'ByID')]
+    # .SYNOPSIS
+    #   Disable a mod in the list of active mods.
+    # .DESCRIPTION
+    #   Removes a single mod from the list of active mods.
+    # .INPUTS
+    #   System.String
+    # .OUTPUTS
+    #   None
+    # .NOTES
+    #   Author: Chris Dent
+    #
+    #   Change log:
+    #     11/10/2016 - Chris Dent - Created.
+
+    [CmdletBinding(DefaultParameterSetName = 'ByID', SupportsShouldProcess = $true)]
+    [OutputType([System.Void])]
     param(
+        # The ID of a mod to disable. The ID is the folder name which may match the name of the mod as seen in RimWorld.
         [Parameter(Mandatory = $true, Position = 1, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'ByID')]
         [String]$ID,
 
+        # The name of the mod as seen in RimWorld.
         [Parameter(Mandatory = $true, ParameterSetName = 'ByName')]
         [String]$Name
     )
 
     begin {
-        $content = [XML](Get-Content $Script:ModConfigPath -Raw)
+        if ($pscmdlet.ParameterSetName -eq 'ByName') {
+            Get-RWMod -Name $Name | Disable-RWMod
+        }
+        if ($pscmdlet.ParameterSetName -eq 'ByID') {
+            $content = [XML](Get-Content $Script:ModConfigPath -Raw)
+        }
     }
 
     process {
-        $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $ID)).
-                                           CreateNavigator().
-                                           DeleteSelf()
+        if ($pscmdlet.ParameterSetName -eq 'ByID') {
+            if ($pscmdlet.ShouldProcess(('Removing {0} from the active mods list' -f $ID))) {
+                $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $ID)).
+                                                   CreateNavigator().
+                                                   DeleteSelf()
+            }
+        }
     }
 
     end {
-        $content.Save($Script:ModConfigPath)
+        if ($pscmdlet.ParameterSetName -eq 'ByID') {
+            $content.Save($Script:ModConfigPath)
+        }
     }
 }
