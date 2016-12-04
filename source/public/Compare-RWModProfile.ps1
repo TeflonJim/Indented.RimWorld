@@ -18,7 +18,7 @@ function Compare-RWModProfile {
 
     if (Test-Path $Script:ModProfilePath\*) {
         $mods = New-Object System.Collections.Generic.Dictionary'[String,PSObject]'
-        $base = Get-RWMod | Sort-Object Name | ForEach-Object {
+        Get-RWMod | Sort-Object Name | ForEach-Object {
             $mods.Add(
                 $_.RawName,
                 ([PSCustomObject]@{ Name = $_.RawName } | Add-Member -TypeName 'Indented.RimWorld.ModProfileEntry' -PassThru)

@@ -12,7 +12,7 @@
 RootModule = 'Indented.RimWorld.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.5.1'
+ModuleVersion = '1.5.20'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -72,13 +72,13 @@ FormatsToProcess = @('Indented.RimWorld.Format.ps1xml')
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+# CmdletsToExport = @()
 
 # Variables to export from this module
-VariablesToExport = '*'
+# VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+# AliasesToExport = @()
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('RimWorld')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://opensource.org/licenses/MIT'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/indented-automation/Indented.RimWorld'
 
         # A URL to an icon representing this module.
         # IconUri = ''
