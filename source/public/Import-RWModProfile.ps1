@@ -2,7 +2,7 @@ function Import-RWModProfile {
     [CmdletBinding(DefaultParameterSetName = 'ByProfileName')]
     param(
         [Parameter(Position = 1, ParameterSetName = 'ByProfileName')]
-        [String]$ProfileName = 'DefaultModProfile',
+        [String]$ProfileName = 'Default',
 
         [Parameter(ParameterSetName = 'FromPath')]
         [ValidateScript( { Test-Path $_ } )]
@@ -13,7 +13,7 @@ function Import-RWModProfile {
     )
 
     if ($pscmdlet.ParameterSetName -eq 'ByProfileName') {
-        $Path = Join-Path $Script:UserSettings ('{0}.txt' -f $ProfileName)
+        $Path = Join-Path $Script:ModProfilePath ('{0}.txt' -f $ProfileName)
     }
 
     if (-not [String]::IsNullOrEmpty($Path) -and (Test-Path $Path -PathType Leaf)) {

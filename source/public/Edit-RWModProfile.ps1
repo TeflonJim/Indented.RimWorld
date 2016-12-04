@@ -1,14 +1,14 @@
 function Edit-RWModProfile {
     param(
         [Parameter(Position = 1, ParameterSetName = 'ByProfileName')]
-        [String]$ProfileName = 'DefaultModProfile'
+        [String]$ProfileName = 'Default'
     )
 
-    $Path = Join-Path $Script:UserSettings ('{0}.txt' -f $ProfileName)
-    if (-not (Test-Path $Path)) {
-        $null = New-Item $Path -ItemType File
+    $path = Join-Path $Script:ModProfilePath ('{0}.txt' -f $ProfileName)
+    if (-not (Test-Path $path)) {
+        $null = New-Item $path -ItemType File
     }
-    if (Test-Path $Path) {
-        notepad $Path
+    if (Test-Path $path) {
+        notepad $path
     }
 }

@@ -29,18 +29,20 @@ function Get-RWMod {
                 $aboutPath = Join-Path $modPath 'About\about.xml'
                 # Test-Path doesn't get on well with some special characters and has no literal path parameter.
                 if ([System.IO.File]::Exists($aboutPath)) {
-                    $modMetaData = ([XML](Get-Item -LiteralPath $aboutPath | Get-Content -Raw)).ModMetaData |
-                        Select-Object @{n='Name';e={ ($_.Name -replace ' *\(?([Av]\d+(\.\d+)*[a-z]*\,?)+\)?').Trim() }},
-                                      @{n='RawName';e={ $_.Name }},
-                                      @{n='ID';e={ $ID }},
-                                      Version,
-                                      Author,
-                                      Description,
-                                      URL,
-                                      TargetVersion,
-                                      @{n='Path';e={ $modPath }} |
-                        Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
+                    $xElement = [System.Xml.Linq.XDocument]::Load($aboutPath).Element('ModMetaData')
+                    $modMetaData = [PSCustomObject]@{
+                        Name          = ($xElement.Element('name').Value -replace ' *\(?([Av]\d+(\.\d+)*[a-z]*\,?)+\)?').Trim()
+                        RawName       = $xElement.Element('name').Value
+                        ID            = $ID
+                        Version       = $xElement.Element('version').Value
+                        Author        = $xElement.Element('author').Value
+                        Description   = $xElement.Element('description').Value
+                        URL           = $xElement.Element('url').Value
+                        TargetVersion = $xElement.Element('targetVersion').Value
+                        Path          = $modPath
+                    } | Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
 
+                    # Best effort version parser
                     $regex = 'v(?:ersion:?)? *((?:\d+\.){1,}\d+)'
                     if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {
                         $modMetaData.Version = $matches[1]
