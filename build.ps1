@@ -9,8 +9,8 @@ Properties {
 
     $msbuildPath                   = 'C:\windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 
-    $nuGetRepository               = $null
-    $nuGetApiKey                   = (Get-Content 'C:\Development\buildtools\nuget.txt' -Raw)
+    $nuGetRepository               = 'PSGallery'
+    $nuGetApiKey                   = $null
     $nuGetPath                     = "C:\Development\buildtools\nuget.exe"
 
     $version                       = '0.0.0'
@@ -39,6 +39,10 @@ Task Release -Depends BuildTest, PublishModule
 Task Setup {
     Assert (Test-Path $nugetPath) 'Nuget.exe must be available'
 
+    if ($nuGetRepository -ne 'PSGallery' -and $null -ne $nuGetRepository -and $null -eq $nuGetApiKey) {
+        Assert (Test-Path 'C:\Development\buildtools\nuget.txt') 'Nuget API key must be available'
+        $Script:nuGetApiKey = Get-Content 'C:\Development\buildtools\nuget.txt' -Raw
+    }
     if (Test-Path $msbuildPath) {
         Set-Alias msbuild $msbuildPath -Scope Global
     }
@@ -270,6 +274,6 @@ Task PublishModule {
     # Publish the module to a repository. Publish-Module handles creating of the nupkg.
 
     if ($null -ne $nuGetRepository) {
-        Publish-Module -Name "$projectPath\$Script:package\$moduleName.psd1" -Repository $nuGetRepository -NuGetApiKey $nuGetApiKey
+        Publish-Module -Name "$projectPath\$Script:package\$moduleName.psd1" -Repository $Script:nuGetRepository # -NuGetApiKey $nuGetApiKey
     }
 }
