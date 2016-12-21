@@ -13,7 +13,7 @@ function Clear-RWModConfig {
     #   Change log:
     #     11/10/2016 - Chris Dent - Created.
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # Disable-RWMod supports this.
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # Disable-RWMod supports this.
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([System.Void])]
     param( )

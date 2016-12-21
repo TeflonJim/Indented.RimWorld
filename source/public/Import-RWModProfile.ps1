@@ -13,7 +13,7 @@ function Import-RWModProfile {
     #   Change log:
     #     11/10/2016 - Chris Dent - Created.
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
     [CmdletBinding(DefaultParameterSetName = 'ByProfileName', SupportsShouldProcess = $true)]
     [OutputType([System.Void])]
     param(
@@ -46,8 +46,6 @@ function Import-RWModProfile {
             if ($mod -and -not $mod.StartsWith('#')) {
                 $rwMod = Get-RWMod -Name $mod
                 if ($rwMod) {
-                    Write-Verbose ('Enabling mod {0}' -f $mod)
-
                     $rwMod | Enable-RWMod
                 } else {
                     Write-Warning ('Unable to find mod {0}' -f $mod)

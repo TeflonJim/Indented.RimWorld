@@ -1,26 +1,46 @@
 function InitializeModule {
     # Paths
 
-    $Script:GamePath = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 294100' -Name 'InstallLocation').InstallLocation
+    $Script:ModuleConfigPath = [System.IO.Path]::Combine(
+        $home,
+        'Documents',
+        'WindowsPowerShell',
+        'Config',
+        'Indented.Rimworld.config'
+    )
+
+    if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 294100') {
+        $Script:GamePath = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 294100' -Name 'InstallLocation').InstallLocation
+    } elseif (Test-Path $configPath) {
+        $Script:GamePath = (ConvertFrom-Json (Get-Content $configPath -Raw)).GamePath
+    } else {
+        throw 'GamePath is not discoverable and not set. Please set a game path with Set-RWGamePath'
+    }
+
+    $Script:GameVersion = [Version]((Get-Content (Join-Path $Script:GamePath 'Version.txt') -Raw) -replace ' .+$')
     $Script:GameModPath = Join-Path $Script:GamePath 'Mods'
+
     $Script:WorkshopModPath = [System.IO.Path]::Combine(
         ([System.IO.DirectoryInfo]$Script:GamePath).Parent.Parent.FullName,
         'workshop',
         'content',
         '294100'
-    )    
+    )
+
     $Script:UserSettings = [System.IO.Path]::Combine(
         $env:USERPROFILE,
         'AppData',
         'LocalLow',
         'Ludeon Studios',
-        'RimWorld'
-    )    
+        'RimWorld by Ludeon Studios'
+    )
+
     $Script:ModConfigPath = [System.IO.Path]::Combine(
         $Script:UserSettings,
         'Config',
         'ModsConfig.xml'
     )
+
     $Script:ModProfilePath = Join-Path $Script:UserSettings 'ModProfiles'
 
     # Cache

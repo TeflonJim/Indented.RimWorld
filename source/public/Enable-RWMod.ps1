@@ -40,15 +40,24 @@ function Enable-RWMod {
 
     process {
         if ($pscmdlet.ParameterSetName -eq 'ByID') {
-            if ($LoadOrder -gt @($content.ModsConfigData.activeMods).Count) {
-                $predecessorID = @($content.ModsConfigData.activeMods.li)[-1]
+            $rwMod = Get-RWMod -ID $ID
+            $modTargetVersion = [Version]$rwMod.TargetVersion
+
+            if ($modTargetVersion.Major -eq $Script:GameVersion.Major -and $modTargetVersion.Minor -eq $Script:GameVersion.Minor) {
+                Write-Verbose ('Enabling mod {0}' -f $mod)
+
+                if ($LoadOrder -gt @($content.ModsConfigData.activeMods).Count) {
+                    $predecessorID = @($content.ModsConfigData.activeMods.li)[-1]
+                } else {
+                    $predecessorID = @($content.ModsConfigData.activeMods.li)[($LoadOrder - 1)]
+                }
+                if ($pscmdlet.ShouldProcess(('Adding {0} to the active mods list' -f $ID))) {
+                    $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $predecessorID)).
+                                                    CreateNavigator().
+                                                    InsertAfter(('<li>{0}</li>' -f [System.Web.HttpUtility]::HtmlAttributeEncode($ID)))
+                }
             } else {
-                $predecessorID = @($content.ModsConfigData.activeMods.li)[($LoadOrder - 1)]
-            }
-            if ($pscmdlet.ShouldProcess(('Adding {0} to the active mods list' -f $ID))) {
-                $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $predecessorID)).
-                                                   CreateNavigator().
-                                                   InsertAfter(('<li>{0}</li>' -f [System.Web.HttpUtility]::HtmlAttributeEncode($ID)))
+                Write-Warning ('Unable to enable mod {0}. Not compatible with RimWorld version {1}.' -f $rwMod.Name, $Script:GameVersion)
             }
         }
     }

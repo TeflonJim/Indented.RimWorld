@@ -17,10 +17,12 @@ function Open-RWDirectory {
     [CmdletBinding(DefaultParameterSetName = 'ByName')]
     [OutputType([System.Void])]
     param(
+        # The name, or tag, of the directory to open.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByName')]
         [ValidateSet('Game', 'GameMods', 'WorkshopMods', 'UserSettings', 'ModProfiles')]
         [String]$Name,
 
+        # Open a directory for an existing mod.
         [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
         [ValidateScript( { $_.PSObject.TypeNames -contains 'Indented.RimWorld.ModInformation' } )]
         [PSObject]$ModInformation

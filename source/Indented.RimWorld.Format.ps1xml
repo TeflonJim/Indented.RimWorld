@@ -20,6 +20,10 @@
                         <Label>Author</Label>
                         <Alignment>left</Alignment>
                     </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>TargetVersion</Label>
+                        <Alignment>left</Alignment>
+                    </TableColumnHeader>                    
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -32,6 +36,9 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Author</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>TargetVersion</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

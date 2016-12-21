@@ -13,6 +13,7 @@ function Get-RWModConfig {
     #   Change log:
     #     11/10/2016 - Chris Dent - Created.
 
+    [CmdletBinding()]
     [OutputType([System.Management.Automation.PSObject])]
     param(
         # The name of the mod as seen in RimWorld.
