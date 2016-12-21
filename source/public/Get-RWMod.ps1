@@ -28,7 +28,14 @@ function Get-RWMod {
     begin {
         if ($pscmdlet.ParameterSetName -eq 'ByName') {
             if ($Script:ModSearchCache.Contains($Name)) {
-                Get-RWMod -ID $Script:ModSearchCache[$Name]
+                $rwMod = Get-RWMod -ID $Script:ModSearchCache[$Name]
+                if ($rwMod) {
+                    $rwMod
+                } else {
+                    # Try and search again if the cache item appears to have become invalid.
+                    $Script:ModSearchCache.Remove($Name)
+                    Get-RWMod -Name $Name
+                }
             } else {
                 Get-RWMod | Where-Object { $_.Name -like $Name }
             }
