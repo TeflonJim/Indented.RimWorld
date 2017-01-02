@@ -40,7 +40,7 @@ function Compare-RWModDef {
 
         # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
-        [ValidateScript( { $_.PSObject.TypeNames -contains 'Indented.RimWorld.ModInformation' } )]
+        [PSTypeName('Indented.RimWorld.ModInformation')]
         $SubjectModInformation,
 
         # By default Core is excluded from the comparison; overriding core is expected behaviour. Conflicts with Core can be displayed using this parameter.

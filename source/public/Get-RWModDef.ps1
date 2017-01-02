@@ -28,7 +28,7 @@ function Get-RWModDef {
 
         # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
-        [ValidateScript( { $_.PSObject.TypeNames -contains 'Indented.RimWorld.ModInformation' } )]
+        [PSTypeName('Indented.RimWorld.ModInformation')]
         $ModInformation,
 
         # Only show warnings

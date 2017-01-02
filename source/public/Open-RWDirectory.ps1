@@ -24,7 +24,7 @@ function Open-RWDirectory {
 
         # Open a directory for an existing mod.
         [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
-        [ValidateScript( { $_.PSObject.TypeNames -contains 'Indented.RimWorld.ModInformation' } )]
+        [PSTypeName('Indented.RimWorld.ModInformation')]
         [PSObject]$ModInformation
     )
 

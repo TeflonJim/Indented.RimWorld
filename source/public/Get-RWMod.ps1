@@ -55,7 +55,7 @@ function Get-RWMod {
                 if ([System.IO.File]::Exists($aboutPath)) {
                     $xElement = [System.Xml.Linq.XDocument]::Load($aboutPath).Element('ModMetaData')
                     $modMetaData = [PSCustomObject]@{
-                        Name          = ($xElement.Element('name').Value -replace ' *\(?([Av]\d+(\.\d+)*[a-z]*\,?)+\)?').Trim()
+                        Name          = ($xElement.Element('name').Value -replace ' *\(?(\[?[Av]\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim().Trim('_-')
                         RawName       = $xElement.Element('name').Value
                         ID            = $ID
                         Version       = $xElement.Element('version').Value
@@ -67,7 +67,7 @@ function Get-RWMod {
                     } | Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
 
                     # Best effort version parser
-                    $regex = 'v(?:ersion:?)? *((?:\d+\.){1,}\d+)'
+                    $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'
                     if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {
                         $modMetaData.Version = $matches[1]
                     }
