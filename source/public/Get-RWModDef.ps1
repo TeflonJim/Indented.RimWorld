@@ -23,8 +23,13 @@ function Get-RWModDef {
     param(
         # Get Defs from the specified mod name.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
-        [ValidateNotNullOrEmpty()]
         [String]$ModName,
+
+        # The name of a Def to retrieve.
+        [String]$DefName,
+
+        # The type of definition to search for.
+        [String]$DefType = '*Defs*',
 
         # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
@@ -37,7 +42,11 @@ function Get-RWModDef {
 
     begin {
         if ($pscmdlet.ParameterSetName -eq 'ByModName') {
-            Get-RWMod -Name $ModName | Get-RWModDef
+            $null = $psboundparameters.Remove('ModName')
+            Get-RWMod -Name $ModName | Get-RWModDef @psboundparameters
+        }
+        if ($DefType -notmatch 'Defs') {
+            $DefType = '{0}Defs*' -f $DefType
         }
     }
 
@@ -45,35 +54,44 @@ function Get-RWModDef {
         if ($pscmdlet.ParameterSetName -eq 'FromModInformation') {
             $defsPath = Join-Path $ModInformation.Path 'Defs'
             if ([System.IO.Directory]::Exists($defsPath)) {
-                Get-ChildItem -LiteralPath $defsPath -Filter *.xml -Recurse | ForEach-Object {
-                    $path = $_.FullName
-                    $name = $_.Name
+                Get-ChildItem -LiteralPath $defsPath -Directory -Filter $DefType | ForEach-Object {
+                    Get-ChildItem -LiteralPath $_.FullName -File -Filter *.xml | ForEach-Object {
+                        $path = $_.FullName
+                        $name = $_.Name
 
-                    Write-Verbose -Message ('Reading {0}' -f $path)
+                        Write-Verbose -Message ('Reading {0}' -f $path)
 
-                    try {
-                        $xDocument = [System.Xml.Linq.XDocument]::Load($path)
-                        foreach ($xElement in $xDocument.Elements()) {
-                            foreach ($defXElement in $xElement.Elements()) {
-                                if ($defXElement.Element('defName').Value) {
+                        try {
+                            $xDocument = [System.Xml.Linq.XDocument]::Load($path)
+                            foreach ($xElement in $xDocument.Elements()) {
+                                foreach ($defXElement in $xElement.Elements()) {
                                     if (-not $WarningsOnly) {
-                                        [PSCustomObject]@{
-                                            DefName          = $defXElement.Element('defName').Value
+                                        $def = [PSCustomObject]@{
+                                            DefName          = $defXElement.Elements().Where( { $_.Name.ToString() -eq 'defName' } ).Value
                                             DefType          = $defXElement.Name
-                                            ID               = '{0}\{1}' -f $defXElement.Name, $defXElement.Element('defName').Value
+                                            ID               = ''
                                             ModName          = $ModInformation.Name
                                             Def              = $defXElement | ConvertFromXElement
                                             DefContainerType = $xElement.Name
                                             Path             = $_.FullName
+                                            XElement         = $defXElement
+                                            IsAbstract       = $false
                                         } | Add-Member -TypeName 'Indented.RimWorld.DefInformation' -PassThru
+                                        if ($abstract = $defXElement.Attributes().Where( { $_.Name.LocalName -eq 'Abstract' } )) {
+                                            $def.IsAbstract = (Get-Variable $abstract.Value).Value
+                                            $def.DefName = $defXElement.Attributes().Where( { $_.Name.LocalName -eq 'Name' }).Value
+                                        }
+                                        $def.ID = '{0}\{1}' -f $def.DefType, $def.DefName
+
+                                        $def
                                     }
                                 }
                             }
+                        } catch {
+                            Write-Warning -Message ('Error loading XML file from {0}\{1} ({2})' -f $ModInformation.Name, $name, $_.Exception.Message)
                         }
-                    } catch {
-                        Write-Warning -Message ('Error loading XML file from {0}\{1} ({2})' -f $ModInformation.Name, $name, $_.Exception.Message)
                     }
-                }
+                } | Where-Object { $DefName -eq '' -or $_.DefName -like $DefName }
             }
         }
     }

@@ -12,7 +12,7 @@
 RootModule = 'Indented.RimWorld.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.5.47'
+ModuleVersion = '1.5.81'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

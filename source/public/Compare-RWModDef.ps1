@@ -65,7 +65,7 @@ function Compare-RWModDef {
     process {
         if ($SubjectModInformation) {
             $subjectModDefs = @{}
-            $SubjectModInformation | Get-RWModDef | ForEach-Object {
+            $SubjectModInformation | Get-RWModDef | Where-Object IsAbstract -eq $false | ForEach-Object {
                 if ($subjectModDefs.Contains($_.ID)) {
                     Write-Warning -Message ('Duplicate Def found. {0} in {1} and {2}' -f
                         $_.DefName,
@@ -85,7 +85,7 @@ function Compare-RWModDef {
                     ($_.Name -ne 'Core' -or ($IncludeCore -and $_.Name -eq 'Core'))
                 } |
                 Get-RWModDef |
-                Where-Object { $subjectModDefs.Contains($_.ID) } |
+                Where-Object { $_.IsAbstract -eq $false -and $subjectModDefs.Contains($_.ID) } |
                 ForEach-Object {
                     $defConflict = [PSCustomObject]@{
                         ID             = $_.ID
