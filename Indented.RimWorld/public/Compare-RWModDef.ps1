@@ -1,34 +1,31 @@
 function Compare-RWModDef {
-    # .SYNOPSIS
-    #   Compares Defs across mods.
-    # .DESCRIPTION
-    #   Compare-RWModDef shows conflicting defNames across RimWorld mods.
-    # .INPUTS
-    #   Indented.RimWorld.Mod
-    #   System.String
-    # .OUTPUTS
-    #   Indented.RimWorld.DefConflict
-    # .EXAMPLE
-    #   Compare-RWModDef SomeMod
-    #
-    #   Compare the Defs from SomeMod with all mods in the Mods directory.
-    # .EXAMPLE
-    #   Compare-RWModDef SomeMod -ObjectModName OtherMod
-    # 
-    #   Compare the Defs from SomeMod with the Defs from OtherMod
-    # .EXAMPLE
-    #   Compare-RWModDef SomeMod -ObjectModName Core -IncludeCore
-    #
-    #   Show the Defs from SomeMod which override the Defs in Core.
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     15/06/2014 - Created
+    <#
+    .SYNOPSIS
+        Compares Defs across mods.
+    .DESCRIPTION
+        Compare-RWModDef shows conflicting defNames across RimWorld mods.
+    .INPUTS
+        Indented.RimWorld.ModInformation
+    .EXAMPLE
+        Compare-RWModDef SomeMod
+
+        Compare the Defs from SomeMod with all mods in the Mods directory.
+    .EXAMPLE
+        Compare-RWModDef SomeMod -ObjectModName OtherMod
+
+        Compare the Defs from SomeMod with the Defs from OtherMod
+    .EXAMPLE
+        Compare-RWModDef SomeMod -ObjectModName Core -IncludeCore
+
+        Show the Defs from SomeMod which override the Defs in Core.
+    .NOTES
+        Change log:
+            15/06/2014 - Chris Dent - Created
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'ByModName')]
-    [OutputType([System.Management.Automation.PSObject])]
-    param(
+    [OutputType('Indented.RimWorld.DefConflict')]
+    param (
         # The mod to test.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
         [String]$SubjectModName,

@@ -1,21 +1,19 @@
 function Enable-RWMod {
-    # .SYNOPSIS
-    #   ENable a mod in the list of active mods.
-    # .DESCRIPTION
-    #   Adds a single mod to the list of active mods.
-    # .INPUTS
-    #   System.String
-    # .OUTPUTS
-    #   None
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     11/10/2016 - Chris Dent - Created.
+    <#
+    .SYNOPSIS
+        Enable a mod in the list of active mods.
+    .DESCRIPTION
+        Adds a single mod to the list of active mods.
+    .INPUTS
+        System.String
+    .NOTES
+        Change log:
+            11/10/2016 - Chris Dent - Created.
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'ByID', SupportsShouldProcess = $true)]
     [OutputType([System.Void])]
-    param(
+    param (
         # The ID of a mod to disable. The ID is the folder name which may match the name of the mod as seen in RimWorld.
         [Parameter(Mandatory = $true, Position = 1, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'ByID')]
         [String]$ID,

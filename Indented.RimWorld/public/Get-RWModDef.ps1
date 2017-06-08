@@ -1,26 +1,23 @@
 function Get-RWModDef {
-    # .SYNOPSIS
-    #   Get Defs from the mod.
-    # .DESCRIPTION
-    #   Get the Defs from the mod.
-    #
-    #   This function attempts to convert first-level elements from the Def XML to an object. As properties in objects must be unique this function will also flag duplicates.
-    # .INPUTS
-    #   Indented.RimWorld.ModInformation
-    #   System.String
-    # .OUTPUTS
-    #   Indented.RimWorld.DefInformation (System.Management.Automation.PSObject)
-    # .EXAMPLE
-    #   Get-RWMod SomeMod | Get-RWModDef
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     15/06/2014 - Created
+    <#
+    .SYNOPSIS
+        Get Defs from the mod.
+    .DESCRIPTION
+        Get the Defs from the mod.
+
+        This function attempts to convert first-level elements from the Def XML to an object. As properties in objects must be unique this function will also flag duplicates.
+    .INPUTS
+        Indented.RimWorld.ModInformation
+    .EXAMPLE
+        Get-RWMod SomeMod | Get-RWModDef
+    .NOTES
+        Change log:
+            15/06/2014 - Chris Dent - Created
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'ByModName')]
-    [OutputType([System.Management.Automation.PSObject])]
-    param(
+    [OutputType('Indented.RimWorld.DefInformation')]
+    param (
         # Get Defs from the specified mod name.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
         [String]$ModName,

@@ -1,22 +1,19 @@
 function Open-RWDirectory {
-    # .SYNOPSIS
-    #   Opens a folder using a tag.
-    # .DESCRIPTION
-    #   A simple way to open any of the folders used by RimWorld or this module.
-    # .INPUTS
-    #   System.String
-    #   System.Managemenet.Automation.PSObject
-    # .OUTPUTS
-    #   None
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     11/10/2016 - Chris Dent - Created.
+    <#
+    .SYNOPSIS
+        Opens a folder using a tag.
+    .DESCRIPTION
+        A simple way to open any of the folders used by RimWorld or this module.
+    .INPUTS
+        System.String
+    .NOTES
+        Change log:
+            11/10/2016 - Chris Dent - Created.
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'ByName')]
     [OutputType([System.Void])]
-    param(
+    param (
         # The name, or tag, of the directory to open.
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByName')]
         [ValidateSet('Game', 'GameMods', 'WorkshopMods', 'UserSettings', 'ModProfiles')]

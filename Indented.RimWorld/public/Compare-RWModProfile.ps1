@@ -1,20 +1,16 @@
 function Compare-RWModProfile {
-    # .SYNOPSIS
-    #   Shows an overview of the mods across each profile.
-    # .DESCRIPTION
-    #   Gets the list of all available mods then shows if a mod is used by a mod profile.
-    # .INPUTS
-    #   None
-    # .OUTPUTS
-    #   Indented.RimWorld.ModProfileEntry (System.Management.Automation.PSObject)
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     04/12/2016 - Chris Dent - Created.
+    <#
+    .SYNOPSIS
+        Shows an overview of the mods across each profile.
+    .DESCRIPTION
+        Gets the list of all available mods then shows if a mod is used by a mod profile.
+    .NOTES
+        Change log:
+            04/12/2016 - Chris Dent - Created.
+    #>
 
-    [OutputType([System.Management.Automation.PSObject])]
-    param( )
+    [OutputType('Indented.RimWorld.ModProfileEntry')]
+    param ( )
 
     if (Test-Path $Script:ModProfilePath\*) {
         $mods = New-Object System.Collections.Generic.Dictionary'[String,PSObject]'

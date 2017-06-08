@@ -1,11 +1,13 @@
 ﻿function Copy-RWModDef {
-    # .SYNOPSIS
-    #   Copies a definition from a mod.
-    # .DESCRIPTION
-    # 
+    <#
+    .SYNOPSIS
+        Copies a definition from a mod.
+    .DESCRIPTION
+        Copies a definition from a mod.
+    #>
 
     [CmdletBinding()]
-    param(
+    param (
         [Parameter(Mandatory = $true)]
         [String]$Name,
     

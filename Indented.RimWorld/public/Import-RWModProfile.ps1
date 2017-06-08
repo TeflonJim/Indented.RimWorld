@@ -1,22 +1,18 @@
 function Import-RWModProfile {
-    # .SYNOPSIS
-    #   Import a mod profile.
-    # .DESCRIPTION
-    #   Imports a list of mods into the active mods list. This overwrites any existing mods.
-    # .INPUTS
-    #   System.String
-    # .OUTPUTS
-    #   None
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     11/10/2016 - Chris Dent - Created.
+    <#
+    .SYNOPSIS
+        Import a mod profile.
+    .DESCRIPTION
+        Imports a list of mods into the active mods list. This overwrites any existing mods.
+    .NOTES
+        Change log:
+            11/10/2016 - Chris Dent - Created.
+    #>
 
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
     [CmdletBinding(DefaultParameterSetName = 'ByProfileName', SupportsShouldProcess = $true)]
     [OutputType([System.Void])]
-    param(
+    param (
         # The name of a profile to import.
         [Parameter(Position = 1, ParameterSetName = 'ByProfileName')]
         [String]$ProfileName = 'Default',

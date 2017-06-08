@@ -13,6 +13,10 @@
                         <Alignment>left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>TargetVersion</Label>
+                        <Alignment>left</Alignment>
+                    </TableColumnHeader>                    
+                    <TableColumnHeader>
                         <Label>Version</Label>
                         <Alignment>left</Alignment>
                     </TableColumnHeader>
@@ -20,10 +24,6 @@
                         <Label>Author</Label>
                         <Alignment>left</Alignment>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>TargetVersion</Label>
-                        <Alignment>left</Alignment>
-                    </TableColumnHeader>                    
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -32,13 +32,13 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>TargetVersion</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>Version</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Author</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>TargetVersion</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

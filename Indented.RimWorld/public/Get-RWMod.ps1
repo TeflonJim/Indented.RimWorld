@@ -1,21 +1,19 @@
 function Get-RWMod {
-    # .SYNOPSIS
-    #   Get the mods available to RimWorld.
-    # .DESCRIPTION
-    #   Get-RWMod searches the games mod path and the workshop mod path for mods.
-    # .INPUTS
-    #   System.String
-    # .OUTPUTS
-    #   Indented.RimWorld.ModInformation (System.Management.Automation.PSObject)
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     11/10/2016 - Chris Dent - Created.
+    <#
+    .SYNOPSIS
+        Get the mods available to RimWorld.
+    .DESCRIPTION
+        Get-RWMod searches the games mod path and the workshop mod path for mods.
+    .INPUTS
+        System.String
+    .NOTES
+        Change log:
+            11/10/2016 - Chris Dent - Created.
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'ByID')]
-    [OutputType([System.Management.Automation.PSObject])]
-    param(
+    [OutputType('Indented.RimWorld.ModInformation')]
+    param (
         # The ID of a mod. The ID is the folder name which may match the name of the mod as seen in RimWorld.
         [Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = 'ByID')]
         [String]$ID,
@@ -55,7 +53,7 @@ function Get-RWMod {
                 if ([System.IO.File]::Exists($aboutPath)) {
                     $xElement = [System.Xml.Linq.XDocument]::Load($aboutPath).Element('ModMetaData')
                     $modMetaData = [PSCustomObject]@{
-                        Name          = ($xElement.Element('name').Value -replace ' *\(?(\[?[Av]\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim().Trim('_-')
+                        Name          = ($xElement.Element('name').Value -replace ' *\(?(\[?[Av]\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
                         RawName       = $xElement.Element('name').Value
                         ID            = $ID
                         Version       = $xElement.Element('version').Value

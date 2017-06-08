@@ -1,21 +1,17 @@
 ﻿function Set-RWGamePath {
-    # .SYNOPSIS
-    #   Set the path to RimWorld if it cannot be discovered.
-    # .DESCRIPTION
-    #   The path to the RimWorld game is used to discover the mods installed into the games directory.
-    # .INPUTS
-    #   System.String
-    # .OUTPUTS
-    #   None
-    # .NOTES
-    #   Author: Chris Dent
-    #
-    #   Change log:
-    #     21/12/2016 - Chris Dent - Created.
+    <#
+    .SYNOPSIS
+        Set the path to RimWorld if it cannot be discovered.
+    .DESCRIPTION
+        The path to the RimWorld game is used to discover the mods installed into the games directory.
+    .NOTES
+        Change log:
+            21/12/2016 - Chris Dent - Created.
+    #>
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
     [CmdletBinding()]
-    param(
+    param (
         # The path to the game.
         [ValidateScript( { Test-Path $_ -PathType Container } )]
         [String]$Path
