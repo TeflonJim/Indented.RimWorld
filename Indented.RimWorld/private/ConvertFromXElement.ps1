@@ -10,7 +10,7 @@ function ConvertFromXElement {
         Change log:
             11/10/2016 - Chris Dent - Created.
     #>
-    
+
     param (
         [Parameter(ValueFromPipeline = $true)]
         [System.Xml.Linq.XElement]$XElement

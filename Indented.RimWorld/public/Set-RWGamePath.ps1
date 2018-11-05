@@ -9,7 +9,7 @@
             21/12/2016 - Chris Dent - Created.
     #>
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')] # All commands used by this support ShouldProcess.
     [CmdletBinding()]
     param (
         # The path to the game.

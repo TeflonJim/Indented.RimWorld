@@ -1,6 +1,7 @@
 ---
 external help file: Indented.RimWorld-help.xml
-online version: 
+Module Name: Indented.RimWorld
+online version:
 schema: 2.0.0
 ---
 
@@ -12,8 +13,8 @@ Copies a definition from a mod.
 ## SYNTAX
 
 ```
-Copy-RWModDef [-Name] <String> [[-DefType] <String>] [[-NewName] <String>] [[-Remove] <String[]>]
- [[-Update] <Hashtable>] [[-SaveAs] <String>]
+Copy-RWModDef [-Name] <String> [[-NewName] <String>] [[-Remove] <String[]>] [[-Update] <Hashtable>]
+ [[-SaveAs] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -22,7 +23,7 @@ Copies a definition from a mod.
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -36,26 +37,11 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DefType
-{{Fill DefType Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 2
-Default value: *Defs*
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -66,10 +52,10 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
-Position: 3
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -81,10 +67,10 @@ Accept wildcard characters: False
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
-Position: 4
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -96,10 +82,10 @@ Accept wildcard characters: False
 ```yaml
 Type: Hashtable
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
-Position: 5
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -111,20 +97,24 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
-Position: 6
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ## OUTPUTS
 
+### System.Xml.Linq.XDocument
 ## NOTES
 
 ## RELATED LINKS
-

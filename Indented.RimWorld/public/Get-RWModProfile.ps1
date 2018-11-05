@@ -10,7 +10,7 @@ function Get-RWModProfile {
         Change log:
             04/12/2016 - Chris Dent - Created.
     #>
-    
+
     [CmdletBinding()]
     [OutputType('Indented.RimWorld.ModProfileInformation')]
     param (

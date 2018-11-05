@@ -7,11 +7,10 @@
     #>
 
     [CmdletBinding()]
+    [OutputType([System.Xml.Linq.XDocument])]
     param (
         [Parameter(Mandatory = $true)]
         [String]$Name,
-    
-        [String]$DefType = '*Defs*',
 
         [String]$NewName,
 
@@ -34,7 +33,7 @@
     if ($Script:defCopyCache.Contains($Name)) {
         $def = $Script:defCopyCache[$Name]
     } else {
-        $def = Get-RWModDef -ModName $modName -DefType $DefType -DefName $defName | ForEach-Object { $_.XElement.ToString() }
+        $def = Get-RWModDef -ModName $modName -DefName $defName | ForEach-Object { $_.XElement.ToString() }
         # Store as a string to disassociate the new instance from anything in the cache.
         $Script:defCopyCache.Add($Name, $def)
     }

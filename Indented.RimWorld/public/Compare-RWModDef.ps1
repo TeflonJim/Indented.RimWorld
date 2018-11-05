@@ -23,6 +23,7 @@ function Compare-RWModDef {
             15/06/2014 - Chris Dent - Created
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
     [CmdletBinding(DefaultParameterSetName = 'ByModName')]
     [OutputType('Indented.RimWorld.DefConflict')]
     param (
@@ -103,7 +104,7 @@ function Compare-RWModDef {
                                 $_.ModName,
                                 $SubjectModInformation.Name
                         } else {
-                            $defConflict.State = '{0}: {1} is used' -f 
+                            $defConflict.State = '{0}: {1} is used' -f
                                 $_.ID,
                                 $SubjectModInformation.Name
                         }

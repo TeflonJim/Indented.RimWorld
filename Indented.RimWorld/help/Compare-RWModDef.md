@@ -1,6 +1,7 @@
 ---
 external help file: Indented.RimWorld-help.xml
-online version: 
+Module Name: Indented.RimWorld
+online version:
 schema: 2.0.0
 ---
 
@@ -14,11 +15,13 @@ Compares Defs across mods.
 ### ByModName (Default)
 ```
 Compare-RWModDef [-SubjectModName] <String> [[-ObjectModName] <String>] [-IncludeCore] [-UseLoadOrder]
+ [<CommonParameters>]
 ```
 
 ### FromModInformation
 ```
 Compare-RWModDef [[-ObjectModName] <String>] -SubjectModInformation <Object> [-IncludeCore] [-UseLoadOrder]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,21 +29,21 @@ Compare-RWModDef shows conflicting defNames across RimWorld mods.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Compare-RWModDef SomeMod
 ```
 
 Compare the Defs from SomeMod with all mods in the Mods directory.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 Compare-RWModDef SomeMod -ObjectModName OtherMod
 ```
 
 Compare the Defs from SomeMod with the Defs from OtherMod
 
-### -------------------------- EXAMPLE 3 --------------------------
+### EXAMPLE 3
 ```
 Compare-RWModDef SomeMod -ObjectModName Core -IncludeCore
 ```
@@ -55,7 +58,7 @@ The mod to test.
 ```yaml
 Type: String
 Parameter Sets: ByModName
-Aliases: 
+Aliases:
 
 Required: True
 Position: 2
@@ -71,7 +74,7 @@ If no mod name is supplied the subject is compared with all mods.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 3
@@ -86,7 +89,7 @@ Accepts an output pipeline from Get-RWMod.
 ```yaml
 Type: Object
 Parameter Sets: FromModInformation
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -102,7 +105,7 @@ Conflicts with Core can be displayed using this parameter.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -117,7 +120,7 @@ Attempts to determine override ordering using the mod load order.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -126,17 +129,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ### Indented.RimWorld.ModInformation
-
 ## OUTPUTS
 
 ### Indented.RimWorld.DefConflict
-
 ## NOTES
 Change log:
     15/06/2014 - Chris Dent - Created
 
 ## RELATED LINKS
-

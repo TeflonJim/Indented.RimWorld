@@ -1,6 +1,7 @@
 ---
 external help file: Indented.RimWorld-help.xml
-online version: 
+Module Name: Indented.RimWorld
+online version:
 schema: 2.0.0
 ---
 
@@ -21,7 +22,7 @@ Gets the list of all available mods then shows if a mod is used by a mod profile
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -34,10 +35,8 @@ PS C:\> {{ Add example code here }}
 ## OUTPUTS
 
 ### Indented.RimWorld.ModProfileEntry
-
 ## NOTES
 Change log:
     04/12/2016 - Chris Dent - Created.
 
 ## RELATED LINKS
-

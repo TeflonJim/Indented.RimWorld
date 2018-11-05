@@ -35,7 +35,7 @@ function Get-RWMod {
                     Get-RWMod -Name $Name
                 }
             } else {
-                Get-RWMod | Where-Object { $_.Name -like $Name }
+                Get-RWMod | Where-Object { $_.Name -like $Name -or $_.Name -eq $Name }
             }
         }
     }
@@ -51,29 +51,34 @@ function Get-RWMod {
                 $aboutPath = Join-Path $modPath 'About\about.xml'
                 # Test-Path doesn't get on well with some special characters and has no literal path parameter.
                 if ([System.IO.File]::Exists($aboutPath)) {
-                    $xElement = [System.Xml.Linq.XDocument]::Load($aboutPath).Element('ModMetaData')
-                    $modMetaData = [PSCustomObject]@{
-                        Name          = ($xElement.Element('name').Value -replace ' *\(?(\[?[Av]\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
-                        RawName       = $xElement.Element('name').Value
-                        ID            = $ID
-                        Version       = $xElement.Element('version').Value
-                        Author        = $xElement.Element('author').Value
-                        Description   = $xElement.Element('description').Value
-                        URL           = $xElement.Element('url').Value
-                        TargetVersion = $xElement.Element('targetVersion').Value
-                        Path          = $modPath
-                    } | Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
+                    try {
+                        $xmlDocument = [Xml](Get-Content $aboutPath -Raw)
+                        $xmlNode = $xmlDocument.ModMetaData
+                        $modMetaData = [PSCustomObject]@{
+                            Name          = ($xmlNode.name -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
+                            RawName       = $xmlNode.name
+                            ID            = $ID
+                            Version       = $xmlNode.version
+                            Author        = $xmlNode.author
+                            Description   = $xmlNode.description
+                            URL           = $xmlNode.url
+                            TargetVersion = $xmlNode.targetVersion
+                            Path          = $modPath
+                        } | Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
 
-                    # Best effort version parser
-                    $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'
-                    if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {
-                        $modMetaData.Version = $matches[1]
-                    }
-                    if (-not $Script:ModSearchCache.Contains($modMetaData.Name)) {
-                        $Script:ModSearchCache.Add($modMetaData.Name, $ID)
-                    }
+                        # Best effort version parser
+                        $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'
+                        if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {
+                            $modMetaData.Version = $matches[1]
+                        }
+                        if (-not $Script:ModSearchCache.Contains($modMetaData.Name)) {
+                            $Script:ModSearchCache.Add($modMetaData.Name, $ID)
+                        }
 
-                    $modMetaData
+                        $modMetaData
+                    } catch {
+                        Write-Error ('Error reading {0}: {1}' -f $aboutPath, $_.Exception.Message.Trim())
+                    }
                 }
             } else {
                 foreach ($path in ($Script:GameModPath, $Script:WorkshopModPath)) {

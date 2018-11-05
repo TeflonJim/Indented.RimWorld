@@ -1,6 +1,7 @@
 ---
 external help file: Indented.RimWorld-help.xml
-online version: 
+Module Name: Indented.RimWorld
+online version:
 schema: 2.0.0
 ---
 
@@ -13,17 +14,17 @@ Import a mod profile.
 
 ### ByProfileName (Default)
 ```
-Import-RWModProfile [[-ProfileName] <String>] [-WhatIf] [-Confirm]
+Import-RWModProfile [[-ProfileName] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### FromPath
 ```
-Import-RWModProfile [-Path <String>] [-WhatIf] [-Confirm]
+Import-RWModProfile [-Path <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### FromString
 ```
-Import-RWModProfile [-ModProfile <String>] [-WhatIf] [-Confirm]
+Import-RWModProfile [-ModProfile <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,7 +34,7 @@ This overwrites any existing mods.
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -47,7 +48,7 @@ The name of a profile to import.
 ```yaml
 Type: String
 Parameter Sets: ByProfileName
-Aliases: 
+Aliases:
 
 Required: False
 Position: 2
@@ -62,7 +63,7 @@ The path to a file containing a profile description.
 ```yaml
 Type: String
 Parameter Sets: FromPath
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -77,7 +78,7 @@ A list of mods to activate.
 ```yaml
 Type: String
 Parameter Sets: FromString
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -117,15 +118,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ## OUTPUTS
 
 ### System.Void
-
 ## NOTES
 Change log:
     11/10/2016 - Chris Dent - Created.
 
 ## RELATED LINKS
-

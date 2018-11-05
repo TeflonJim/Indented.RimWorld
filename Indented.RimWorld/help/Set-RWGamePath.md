@@ -1,6 +1,7 @@
 ---
 external help file: Indented.RimWorld-help.xml
-online version: 
+Module Name: Indented.RimWorld
+online version:
 schema: 2.0.0
 ---
 
@@ -12,7 +13,7 @@ Set the path to RimWorld if it cannot be discovered.
 ## SYNTAX
 
 ```
-Set-RWGamePath [[-Path] <String>]
+Set-RWGamePath [[-Path] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -21,7 +22,7 @@ The path to the RimWorld game is used to discover the mods installed into the ga
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -35,7 +36,7 @@ The path to the game.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -43,6 +44,10 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -53,4 +58,3 @@ Change log:
     21/12/2016 - Chris Dent - Created.
 
 ## RELATED LINKS
-
