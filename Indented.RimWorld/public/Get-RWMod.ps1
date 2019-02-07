@@ -55,16 +55,20 @@ function Get-RWMod {
                         $xmlDocument = [Xml](Get-Content $aboutPath -Raw)
                         $xmlNode = $xmlDocument.ModMetaData
                         $modMetaData = [PSCustomObject]@{
-                            Name          = ($xmlNode.name -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
-                            RawName       = $xmlNode.name
-                            ID            = $ID
-                            Version       = $xmlNode.version
-                            Author        = $xmlNode.author
-                            Description   = $xmlNode.description
-                            URL           = $xmlNode.url
-                            TargetVersion = $xmlNode.targetVersion
-                            Path          = $modPath
-                        } | Add-Member -TypeName 'Indented.RimWorld.ModInformation' -PassThru
+                            Name              = ($xmlNode.name -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
+                            RawName           = $xmlNode.name
+                            ID                = $ID
+                            Version           = $xmlNode.version
+                            Author            = $xmlNode.author
+                            Description       = $xmlNode.description
+                            URL               = $xmlNode.url
+                            SupportedVersions = $xmlNode.targetVersion
+                            Path              = $modPath
+                            PSTypeName        = 'Indented.RimWorld.ModInformation'
+                        }
+                        if ($xmlNode.SupportedVersions) {
+                            $modMetaData.SupportedVersions = $xmlNode.SupportedVersions.li
+                        }
 
                         # Best effort version parser
                         $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'

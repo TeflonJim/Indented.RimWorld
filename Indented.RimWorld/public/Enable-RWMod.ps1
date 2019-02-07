@@ -39,22 +39,28 @@ function Enable-RWMod {
     process {
         if ($pscmdlet.ParameterSetName -eq 'ByID') {
             $rwMod = Get-RWMod -ID $ID
-            $modTargetVersion = [Version]$rwMod.TargetVersion
 
-            if ($modTargetVersion.Major -eq $Script:GameVersion.Major -and $modTargetVersion.Minor -eq $Script:GameVersion.Minor) {
-                Write-Verbose ('Enabling mod {0}' -f $mod)
+            $supported = $false
+            foreach ($version in $rwMod.SupportedVersions) {
+                $version = [Version]$version
+                if ($version.Major -eq $Script:GameVersion.Major -and $version.Minor -eq $Script:GameVersion.Minor) {
+                    $supported = $true
 
-                if ($LoadOrder -gt @($content.ModsConfigData.activeMods).Count) {
-                    $predecessorID = @($content.ModsConfigData.activeMods.li)[-1]
-                } else {
-                    $predecessorID = @($content.ModsConfigData.activeMods.li)[($LoadOrder - 1)]
+                    Write-Verbose ('Enabling mod {0}' -f $mod)
+
+                    if ($LoadOrder -gt @($content.ModsConfigData.activeMods).Count) {
+                        $predecessorID = @($content.ModsConfigData.activeMods.li)[-1]
+                    } else {
+                        $predecessorID = @($content.ModsConfigData.activeMods.li)[($LoadOrder - 1)]
+                    }
+                    if ($pscmdlet.ShouldProcess(('Adding {0} to the active mods list' -f $ID))) {
+                        $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $predecessorID)).
+                                                           CreateNavigator().
+                                                           InsertAfter(('<li>{0}</li>' -f [System.Web.HttpUtility]::HtmlAttributeEncode($ID)))
+                    }
                 }
-                if ($pscmdlet.ShouldProcess(('Adding {0} to the active mods list' -f $ID))) {
-                    $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $predecessorID)).
-                                                    CreateNavigator().
-                                                    InsertAfter(('<li>{0}</li>' -f [System.Web.HttpUtility]::HtmlAttributeEncode($ID)))
-                }
-            } else {
+            }
+            if (-not $supported) {
                 Write-Warning ('Unable to enable mod {0}. Not compatible with RimWorld version {1}.' -f $rwMod.Name, $Script:GameVersion)
             }
         }
