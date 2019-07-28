@@ -10,9 +10,6 @@ function Get-RWModDef {
         Indented.RimWorld.ModInformation
     .EXAMPLE
         Get-RWMod SomeMod | Get-RWModDef
-    .NOTES
-        Change log:
-            15/06/2014 - Chris Dent - Created
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'ByModName')]
@@ -24,6 +21,9 @@ function Get-RWModDef {
 
         # The name of a Def to retrieve.
         [String]$DefName,
+
+        # The def type to find.
+        [String]$DefType,
 
         # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
@@ -53,29 +53,36 @@ function Get-RWModDef {
 
                     try {
                         $xDocument = [System.Xml.Linq.XDocument]::Load($path)
-                        if ($DefName) {
-                            $xpathQuery = ('*/*[contains(translate(defName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{0}") or ' +
-                                'contains(translate(@Name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{0}")]') -f
-                                $DefName.ToLower()
+                        if ($DefType) {
+                            $xpathQuery = '/Defs/{0}' -f $DefType
                         } else {
-                            $xpathQuery = '*/*'
+                            $xpathQuery = '/Defs/*'
                         }
-
+                        if ($DefName) {
+                            $xpathQuery = (@(
+                                '({0}[contains(translate(defName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{1}") or'
+                                'contains(translate(@Name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{1}")])'
+                            ) -join ' ') -f @(
+                                $xPathQuery
+                                $DefName.ToLower()
+                            )
+                        }
                         [System.Xml.XPath.Extensions]::XPathSelectElements(
                             $xDocument,
                             $xpathQuery
                         ) | ForEach-Object {
                             if (-not $WarningsOnly) {
                                 $def = [PSCustomObject]@{
-                                    DefName          = $_.Elements().Where( { $_.Name.ToString() -eq 'defName' } ).Value
-                                    DefType          = $_.Name
-                                    ID               = ''
-                                    ModName          = $ModInformation.Name
-                                    Def              = $_ | ConvertFromXElement
-                                    Path             = $path
-                                    XElement         = $_
-                                    IsAbstract       = $false
-                                } | Add-Member -TypeName 'Indented.RimWorld.DefInformation' -PassThru
+                                    DefName    = $_.Elements().Where( { $_.Name.ToString() -eq 'defName' } ).Value
+                                    DefType    = $_.Name
+                                    ID         = ''
+                                    ModName    = $ModInformation.Name
+                                    Def        = $_ | ConvertFromXElement
+                                    Path       = $path
+                                    XElement   = $_
+                                    IsAbstract = $false
+                                    PSTypeName = 'Indented.RimWorld.DefInformation'
+                                }
                                 if ($abstract = $_.Attributes().Where( { $_.Name.LocalName -eq 'Abstract' } )) {
                                     $def.IsAbstract = (Get-Variable $abstract.Value).Value
                                     $def.DefName = $_.Attributes().Where( { $_.Name.LocalName -eq 'Name' }).Value

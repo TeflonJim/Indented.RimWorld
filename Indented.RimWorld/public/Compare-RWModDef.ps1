@@ -94,7 +94,8 @@ function Compare-RWModDef {
                         ObjectMod      = $_.ModName
                         ObjectType     = $_.DefType
                         ObjectFile     = $_.Path
-                    } | Add-Member -TypeName 'Indented.RimWorld.DefConflict' -PassThru
+                        PSTypeName     = 'Indented.RimWorld.DefConflict'
+                    }
 
                     if ($UseLoadOrder) {
                         $defConflict | Add-Member State ''

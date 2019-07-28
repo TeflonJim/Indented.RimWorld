@@ -12,6 +12,8 @@
         [Parameter(Mandatory = $true)]
         [String]$Name,
 
+        [String]$DefType,
+
         [String]$NewName,
 
         [String[]]$Remove,
@@ -22,6 +24,11 @@
         [String]$SaveAs
     )
 
+    $id = $Name
+    if ($DefType) {
+        $id = '{0}\{1}' -f $Name, $DefType
+    }
+
     $modName, $defName = $Name -split '[\\/]'
     if ($null -eq $modName) {
         $modName = 'Core'
@@ -30,20 +37,26 @@
     if ($null -eq $Script:defCopyCache) {
         $Script:defCopyCache = @{}
     }
-    if ($Script:defCopyCache.Contains($Name)) {
-        $def = $Script:defCopyCache[$Name]
+    if ($Script:defCopyCache.Contains($id)) {
+        $def = $Script:defCopyCache[$id]
     } else {
-        $def = Get-RWModDef -ModName $modName -DefName $defName | ForEach-Object { $_.XElement.ToString() }
-        # Store as a string to disassociate the new instance from anything in the cache.
-        $Script:defCopyCache.Add($Name, $def)
+        $params = @{
+            ModName = $modName
+            DefName = $defName
+        }
+        if ($DefType) {
+            $params.DefType = $DefType
+        }
+        $def = Get-RWModDef @params | ForEach-Object { $_.XElement.ToString() }
+        $Script:defCopyCache.Add($id, $def)
     }
 
     if ($null -eq $def) {
-        $errorRecord = New-Object System.Management.Automation.ErrorRecord(
-            (New-Object System.ArgumentException('Cannot locate source def')),
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+            [ArgumentException]::new('Cannot locate source def'),
             'UnknownDef',
             [System.Management.Automation.ErrorCategory]::InvalidArgument,
-            ('{0}\{1}' -f $modName, $defName)
+            $id
         )
         $pscmdlet.ThrowTerminatingError($errorRecord)
     }
@@ -86,7 +99,7 @@
                         $xElement = $childAttribute
                     } else {
                         $xElement.Add((
-                            New-Object System.Xml.Linq.XElement(
+                            [System.Xml.Linq.XElement]::new(
                                 [System.Xml.Linq.XName]$element,
                                 $null
                             )
@@ -101,7 +114,7 @@
                 if ($Update[$item] -is [Array]) {
                     foreach ($value in $Update[$item]) {
                         $xElement.Add((
-                            New-Object System.Xml.Linq.XElement(
+                            [System.Xml.Linq.XElement]::new(
                                 [System.Xml.Linq.XName]'li',
                                 $value
                             )

@@ -14,12 +14,13 @@ Get Defs from the mod.
 
 ### ByModName (Default)
 ```
-Get-RWModDef [-ModName] <String> [-DefName <String>] [-WarningsOnly] [<CommonParameters>]
+Get-RWModDef [-ModName] <String> [-DefName <String>] [-DefType <String>] [-WarningsOnly] [<CommonParameters>]
 ```
 
 ### FromModInformation
 ```
-Get-RWModDef [-DefName <String>] -ModInformation <Object> [-WarningsOnly] [<CommonParameters>]
+Get-RWModDef [-DefName <String>] [-DefType <String>] -ModInformation <Object> [-WarningsOnly]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -67,6 +68,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DefType
+The def type to find.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ModInformation
 Accepts an output pipeline from Get-RWMod.
 
@@ -98,8 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -108,7 +123,5 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ### Indented.RimWorld.DefInformation
 ## NOTES
-Change log:
-    15/06/2014 - Chris Dent - Created
 
 ## RELATED LINKS

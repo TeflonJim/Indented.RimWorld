@@ -13,8 +13,8 @@ Copies a definition from a mod.
 ## SYNTAX
 
 ```
-Copy-RWModDef [-Name] <String> [[-NewName] <String>] [[-Remove] <String[]>] [[-Update] <Hashtable>]
- [[-SaveAs] <String>] [<CommonParameters>]
+Copy-RWModDef [-Name] <String> [[-DefType] <String>] [[-NewName] <String>] [[-Remove] <String[]>]
+ [[-Update] <Hashtable>] [[-SaveAs] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,7 +32,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Name
-{{Fill Name Description}}
+{{ Fill Name Description }}
 
 ```yaml
 Type: String
@@ -46,8 +46,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NewName
-{{Fill NewName Description}}
+### -DefType
+{{ Fill DefType Description }}
 
 ```yaml
 Type: String
@@ -61,11 +61,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Remove
-{{Fill Remove Description}}
+### -NewName
+{{ Fill NewName Description }}
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -76,11 +76,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Update
-{{Fill Update Description}}
+### -Remove
+{{ Fill Remove Description }}
 
 ```yaml
-Type: Hashtable
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -91,11 +91,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SaveAs
-{{Fill SaveAs Description}}
+### -Update
+{{ Fill Update Description }}
 
 ```yaml
-Type: String
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -106,9 +106,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SaveAs
+{{ Fill SaveAs Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
