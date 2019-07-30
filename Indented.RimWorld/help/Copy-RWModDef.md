@@ -12,9 +12,16 @@ Copies a definition from a mod.
 
 ## SYNTAX
 
+### CopyFromMod (Default)
 ```
-Copy-RWModDef [-Name] <String> [[-DefType] <String>] [[-NewName] <String>] [[-Remove] <String[]>]
- [[-Update] <Hashtable>] [[-SaveAs] <String>] [<CommonParameters>]
+Copy-RWModDef -Name <String> [-DefType <String>] [-NewName <String>] [-Remove <String[]>] [-Update <Hashtable>]
+ [-SaveAs <String>] [<CommonParameters>]
+```
+
+### CreateFromDef
+```
+Copy-RWModDef -Def <String> [-NewName <String>] [-Remove <String[]>] [-Update <Hashtable>] [-SaveAs <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,11 +43,11 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: CopyFromMod
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -51,11 +58,26 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: CopyFromMod
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Def
+{{ Fill Def Description }}
+
+```yaml
+Type: String
+Parameter Sets: CreateFromDef
+Aliases:
+
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -70,7 +92,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -85,7 +107,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -100,7 +122,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -115,7 +137,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

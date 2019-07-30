@@ -6,13 +6,17 @@
         Copies a definition from a mod.
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'CopyFromMod')]
     [OutputType([System.Xml.Linq.XDocument])]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory, ParameterSetName = 'CopyFromMod')]
         [String]$Name,
 
+        [Parameter(ParameterSetName = 'CopyFromMod')]
         [String]$DefType,
+
+        [Parameter(Mandatory, ParameterSetName = 'CreateFromDef')]
+        [String]$Def,
 
         [String]$NewName,
 
@@ -24,31 +28,33 @@
         [String]$SaveAs
     )
 
-    $id = $Name
-    if ($DefType) {
-        $id = '{0}\{1}' -f $Name, $DefType
-    }
-
-    $modName, $defName = $Name -split '[\\/]'
-    if ($null -eq $modName) {
-        $modName = 'Core'
-    }
-
-    if ($null -eq $Script:defCopyCache) {
-        $Script:defCopyCache = @{}
-    }
-    if ($Script:defCopyCache.Contains($id)) {
-        $def = $Script:defCopyCache[$id]
-    } else {
-        $params = @{
-            ModName = $modName
-            DefName = $defName
-        }
+    if ($pscmdlet.ParameterSetName -eq 'CopyFromMod') {
+        $id = $Name
         if ($DefType) {
-            $params.DefType = $DefType
+            $id = '{0}\{1}' -f $Name, $DefType
         }
-        $def = Get-RWModDef @params | ForEach-Object { $_.XElement.ToString() }
-        $Script:defCopyCache.Add($id, $def)
+
+        $modName, $defName = $Name -split '[\\/]'
+        if ($null -eq $modName) {
+            $modName = 'Core'
+        }
+
+        if ($null -eq $Script:defCopyCache) {
+            $Script:defCopyCache = @{}
+        }
+        if ($Script:defCopyCache.Contains($id)) {
+            $def = $Script:defCopyCache[$id]
+        } else {
+            $params = @{
+                ModName = $modName
+                DefName = $defName
+            }
+            if ($DefType) {
+                $params.DefType = $DefType
+            }
+            $def = Get-RWModDef @params | ForEach-Object { $_.XElement.ToString() }
+            $Script:defCopyCache.Add($id, $def)
+        }
     }
 
     if ($null -eq $def) {
@@ -61,21 +67,21 @@
         $pscmdlet.ThrowTerminatingError($errorRecord)
     }
 
-    $def = [System.Xml.Linq.XDocument]::Parse($def)
+    $defCopy = [System.Xml.Linq.XDocument]::Parse($def)
 
     if ($NewName) {
-        if ($def.Root.Element('DefName')) {
-            $def.Root.Element('DefName').SetValue($NewName)
-        } elseif ($def.Root.Element('defName')) {
-            $def.Root.Element('defName').SetValue($NewName)
-        } elseif ($def.Root.Attribute('Name')) {
-            $def.Root.Attribute('Name').SetValue($NewName)
+        if ($defCopy.Root.Element('DefName')) {
+            $defCopy.Root.Element('DefName').SetValue($NewName)
+        } elseif ($defCopy.Root.Element('defName')) {
+            $defCopy.Root.Element('defName').SetValue($NewName)
+        } elseif ($defCopy.Root.Attribute('Name')) {
+            $defCopy.Root.Attribute('Name').SetValue($NewName)
         }
     }
 
     if ($psboundparameters.ContainsKey('Remove')) {
         foreach ($item in $Remove) {
-            $xElement = $def.FirstNode
+            $xElement = $defCopy.FirstNode
             foreach($element in $item.Split('.')) {
                 if ($xElement) {
                     $xElement = $xElement.Element($element)
@@ -89,7 +95,7 @@
 
     if ($psboundparameters.ContainsKey('Update')) {
         foreach ($item in $Update.Keys) {
-            $xElement = $def.FirstNode
+            $xElement = $defCopy.FirstNode
             foreach ($element in $item.Split('.')) {
                 $childXElement = $xElement.Element($element)
                 if ($null -eq $childXElement) {
@@ -129,10 +135,10 @@
 
     if ($SaveAs) {
         $xDocument = [System.Xml.Linq.XDocument]::Load($SaveAs)
-        $xDocument.Root.Add($def.Root)
+        $xDocument.Root.Add($defCopy.Root)
 
         $xDocument.Save($SaveAs)
     } else {
-        $def
+        $defCopy
     }
 }
