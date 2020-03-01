@@ -28,7 +28,7 @@ function Compare-RWModDef {
     [OutputType('Indented.RimWorld.DefConflict')]
     param (
         # The mod to test.
-        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'ByModName')]
         [String]$SubjectModName,
 
         # The mod to compare with. If no mod name is supplied the subject is compared with all mods.
@@ -37,7 +37,7 @@ function Compare-RWModDef {
         [String]$ObjectModName = "*",
 
         # Accepts an output pipeline from Get-RWMod.
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
+        [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = 'FromModInformation')]
         [PSTypeName('Indented.RimWorld.ModInformation')]
         $SubjectModInformation,
 

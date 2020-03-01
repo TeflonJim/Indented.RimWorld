@@ -16,7 +16,7 @@ function Get-RWModDef {
     [OutputType('Indented.RimWorld.DefInformation')]
     param (
         # Get Defs from the specified mod name.
-        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByModName')]
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'ByModName')]
         [String]$ModName,
 
         # The name of a Def to retrieve.
@@ -26,7 +26,7 @@ function Get-RWModDef {
         [String]$DefType,
 
         # Accepts an output pipeline from Get-RWMod.
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
+        [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = 'FromModInformation')]
         [PSTypeName('Indented.RimWorld.ModInformation')]
         $ModInformation,
 

@@ -10,7 +10,7 @@ function Import-RWModProfile {
     #>
 
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
-    [CmdletBinding(DefaultParameterSetName = 'ByProfileName', SupportsShouldProcess = $true)]
+    [CmdletBinding(DefaultParameterSetName = 'ByProfileName', SupportsShouldProcess)]
     [OutputType([System.Void])]
     param (
         # The name of a profile to import.

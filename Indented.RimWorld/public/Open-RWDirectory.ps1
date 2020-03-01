@@ -15,12 +15,12 @@ function Open-RWDirectory {
     [OutputType([System.Void])]
     param (
         # The name, or tag, of the directory to open.
-        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByName')]
-        [ValidateSet('Game', 'GameMods', 'WorkshopMods', 'UserSettings', 'ModProfiles')]
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'ByName')]
+        [ValidateSet('Game', 'GameExpansions', 'GameMods', 'WorkshopMods', 'UserSettings', 'ModProfiles')]
         [String]$Name,
 
         # Open a directory for an existing mod.
-        [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FromModInformation')]
+        [Parameter(ValueFromPipeline, ParameterSetName = 'FromModInformation')]
         [PSTypeName('Indented.RimWorld.ModInformation')]
         [PSObject]$ModInformation
     )
@@ -28,11 +28,12 @@ function Open-RWDirectory {
     begin {
         if ($pscmdlet.ParameterSetName -eq 'ByName') {
             switch ($Name) {
-                'Game'         { Invoke-Item $Script:GamePath; break }
-                'GameMods'     { Invoke-Item $Script:GameModPath; break }
-                'WorkshopMods' { Invoke-Item $Script:WorkshopModPath; break }
-                'UserSettings' { Invoke-Item $Script:UserSettings; break }
-                'ModProfiles'  { Invoke-Item $Script:ModProfilePath; break }
+                'Game'           { Invoke-Item $Script:GamePath; break }
+                'GameExpansions' { Invoke-Item $Script:GameExpansionPath; break }
+                'GameMods'       { Invoke-Item $Script:GameModPath; break }
+                'WorkshopMods'   { Invoke-Item $Script:WorkshopModPath; break }
+                'UserSettings'   { Invoke-Item $Script:UserSettings; break }
+                'ModProfiles'    { Invoke-Item $Script:ModProfilePath; break }
             }
         }
     }

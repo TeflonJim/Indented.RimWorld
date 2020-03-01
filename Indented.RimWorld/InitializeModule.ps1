@@ -19,6 +19,7 @@ function InitializeModule {
 
     $Script:GameVersion = [Version]((Get-Content (Join-Path $Script:GamePath 'Version.txt') -Raw) -replace ' .+$')
     $Script:GameModPath = Join-Path $Script:GamePath 'Mods'
+    $Script:GameExpansionPath = Join-Path $Script:GamePath 'Data'
 
     $Script:WorkshopModPath = [System.IO.Path]::Combine(
         ([System.IO.DirectoryInfo]$Script:GamePath).Parent.Parent.FullName,

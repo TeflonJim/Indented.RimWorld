@@ -15,7 +15,7 @@ function Get-RWMod {
     [OutputType('Indented.RimWorld.ModInformation')]
     param (
         # The ID of a mod. The ID is the folder name which may match the name of the mod as seen in RimWorld.
-        [Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = 'ByID')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ByID')]
         [String]$ID,
 
         # The name of the mod as seen in RimWorld.
@@ -44,48 +44,59 @@ function Get-RWMod {
         if ($pscmdlet.ParameterSetName -eq 'ByID') {
             if ($psboundparameters.ContainsKey('ID')) {
                 if ([Int32]::TryParse($ID, [Ref]$null)) {
-                    $modPath = Join-Path $Script:WorkshopModPath $ID
+                    $modPaths = Join-Path $Script:WorkshopModPath $ID
                 } else {
-                    $modPath = Join-Path $Script:GameModPath $ID
+                    $modPaths = $Script:GameExpansionPath, $Script:GameModPath |
+                        Join-Path -ChildPath { $ID }
                 }
-                $aboutPath = Join-Path $modPath 'About\about.xml'
-                # Test-Path doesn't get on well with some special characters and has no literal path parameter.
-                if ([System.IO.File]::Exists($aboutPath)) {
-                    try {
-                        $xmlDocument = [Xml](Get-Content $aboutPath -Raw)
-                        $xmlNode = $xmlDocument.ModMetaData
-                        $modMetaData = [PSCustomObject]@{
-                            Name              = ($xmlNode.name -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
-                            RawName           = $xmlNode.name
-                            ID                = $ID
-                            Version           = $xmlNode.version
-                            Author            = $xmlNode.author
-                            Description       = $xmlNode.description
-                            URL               = $xmlNode.url
-                            SupportedVersions = $xmlNode.targetVersion
-                            Path              = $modPath
-                            PSTypeName        = 'Indented.RimWorld.ModInformation'
-                        }
-                        if ($xmlNode.SupportedVersions) {
-                            $modMetaData.SupportedVersions = $xmlNode.SupportedVersions.li
-                        }
 
-                        # Best effort version parser
-                        $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'
-                        if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {
-                            $modMetaData.Version = $matches[1]
-                        }
-                        if (-not $Script:ModSearchCache.Contains($modMetaData.Name)) {
-                            $Script:ModSearchCache.Add($modMetaData.Name, $ID)
-                        }
+                foreach ($modPath in $modPaths) {
+                    $aboutPath = Join-Path $modPath 'About\about.xml'
+                    # Test-Path doesn't get on well with some special characters and has no literal path parameter.
+                    if ([System.IO.File]::Exists($aboutPath)) {
+                        try {
+                            $xmlDocument = [Xml](Get-Content $aboutPath -Raw)
+                            $xmlNode = $xmlDocument.ModMetaData
 
-                        $modMetaData
-                    } catch {
-                        Write-Error ('Error reading {0}: {1}' -f $aboutPath, $_.Exception.Message.Trim())
+                            if ($xmlNode.SelectSingleNode('/*/name')) {
+                                $modName = ($xmlNode.name -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?').Trim(' _-')
+                            } else {
+                                $modName = $ID
+                            }
+
+                            $modMetaData = [PSCustomObject]@{
+                                Name              = $modName
+                                RawName           = $xmlNode.name
+                                ID                = $ID
+                                Version           = $xmlNode.version
+                                Author            = $xmlNode.author
+                                Description       = $xmlNode.description
+                                URL               = $xmlNode.url
+                                SupportedVersions = $xmlNode.targetVersion
+                                Path              = $modPath
+                                PSTypeName        = 'Indented.RimWorld.ModInformation'
+                            }
+                            if ($xmlNode.SupportedVersions) {
+                                $modMetaData.SupportedVersions = $xmlNode.SupportedVersions.li
+                            }
+
+                            # Best effort version parser
+                            $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'
+                            if ($modMetaData.Name -match $regex -or $modMetaData.Description -match $regex) {
+                                $modMetaData.Version = $matches[1]
+                            }
+                            if (-not $Script:ModSearchCache.Contains($modMetaData.Name)) {
+                                $Script:ModSearchCache.Add($modMetaData.Name, $ID)
+                            }
+
+                            $modMetaData
+                        } catch {
+                            Write-Error ('Error reading {0}: {1}' -f $aboutPath, $_.Exception.Message.Trim())
+                        }
                     }
                 }
             } else {
-                foreach ($path in ($Script:GameModPath, $Script:WorkshopModPath)) {
+                foreach ($path in $Script:GameExpansionPath, $Script:GameModPath, $Script:WorkshopModPath) {
                     Get-ChildItem $path -Directory | Get-RWMod -ID { $_.Name }
                 }
             }

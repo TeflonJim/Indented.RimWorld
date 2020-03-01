@@ -11,15 +11,15 @@ function Enable-RWMod {
             11/10/2016 - Chris Dent - Created.
     #>
 
-    [CmdletBinding(DefaultParameterSetName = 'ByID', SupportsShouldProcess = $true)]
+    [CmdletBinding(DefaultParameterSetName = 'ByID', SupportsShouldProcess)]
     [OutputType([System.Void])]
     param (
         # The ID of a mod to disable. The ID is the folder name which may match the name of the mod as seen in RimWorld.
-        [Parameter(Mandatory = $true, Position = 1, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'ByID')]
+        [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName, ParameterSetName = 'ByID')]
         [String]$ID,
 
         # The name of the mod as seen in RimWorld.
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByName')]
+        [Parameter(Mandatory, ParameterSetName = 'ByName')]
         [String]$Name,
 
         # The position the mod should be loaded in. By default mods are added to the end of the list of active mods.
