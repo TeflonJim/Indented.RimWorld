@@ -37,16 +37,47 @@ function Import-RWModProfile {
 
     if (-not [String]::IsNullOrEmpty($ModProfile)) {
         Clear-RWModConfig
-        foreach ($mod in $ModProfile.Split("`r`n", [System.StringSplitOptions]::RemoveEmptyEntries)) {
+        $modsToEnable = foreach ($mod in $ModProfile.Split("`r`n", [System.StringSplitOptions]::RemoveEmptyEntries)) {
             $mod = $mod.Trim()
             if ($mod -and -not $mod.StartsWith('#')) {
                 $rwMod = Get-RWMod -Name $mod
                 if ($rwMod) {
-                    $rwMod | Enable-RWMod
+                    if (-not $rwMod.PackageID) {
+                        # Strip PackageID and allow Enable-RWMod to report on compatibility by name.
+                        $rwMod = $rwMod | Select-Object * -ExcludeProperty PackageID
+                    }
+                    $rwMod
                 } else {
                     Write-Warning ('Unable to find mod {0}' -f $mod)
                 }
             }
         }
+
+        # Verify load order
+        $allPackageIDs = $modsToEnable.PackageID
+        for ($i = 0; $i -lt $modsToEnable.Count; $i++) {
+            $rwMod = $modsToEnable[$i]
+
+            foreach ($packageID in $rwMod.Dependencies) {
+                if ($allPackageIDs.IndexOf($packageID) -lt 0) {
+                    Write-Error ('{0} depends on the missing module {1}' -f $rwMod.Name, $packageID)
+                }
+            }
+
+            foreach ($packageID in $rwMod.LoadAfter) {
+                if ($allPackageIDs.IndexOf($packageID) -gt $i) {
+                    Write-Error ('{0} should load after {1}' -f $rwMod.Name, (Get-RWMod -PackageID $packageID).Name)
+                }
+            }
+
+            foreach ($packageID in $rwMod.LoadBefore) {
+                $index = $allPackageIDs.IndexOf($packageID)
+                if ($index -gt -1 -and $index -lt $i) {
+                    Write-Error ('{0} should load before {1}' -f $rwMod.Name, (Get-RWMod -PackageID $packageID).Name)
+                }
+            }
+        }
+
+        $modsToEnable | Enable-RWMod
     }
 }

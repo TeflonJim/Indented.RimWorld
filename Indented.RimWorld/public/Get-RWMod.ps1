@@ -93,11 +93,20 @@ function Get-RWMod {
                                 Description       = $xmlNode.description
                                 URL               = $xmlNode.url
                                 SupportedVersions = $xmlNode.targetVersion
+                                LoadAfter         = $xmlNode.loadAfter.li
+                                LoadBefore        = $xmlNode.loadBefore.li
+                                IncompatibleWith  = $xmlNode.incompatibleWith.li
+                                Dependencies      = $xmlNode.modDependencies.li.packageID
                                 Path              = $modPath
                                 PSTypeName        = 'Indented.RimWorld.ModInformation'
                             }
                             if ($xmlNode.SupportedVersions) {
                                 $modMetadata.SupportedVersions = $xmlNode.SupportedVersions.li
+                            }
+                            foreach ($property in 'ID', 'PackageID', 'LoadAfter', 'LoadBefore', 'Dependencies') {
+                                $modMetadata.$property = foreach ($value in $modMetadata.$property) {
+                                    $value.ToLower()
+                                }
                             }
 
                             # Best effort version parser

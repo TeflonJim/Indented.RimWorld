@@ -12,9 +12,9 @@ Enable a mod in the list of active mods.
 
 ## SYNTAX
 
-### ByID (Default)
+### ByPackageID (Default)
 ```
-Enable-RWMod [-ID] <String> [-LoadOrder <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enable-RWMod [-PackageID] <String> [-LoadOrder <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ByName
@@ -36,13 +36,13 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -ID
-The ID of a mod to disable.
+### -PackageID
+The ID of a mod to enable.
 The ID is the folder name which may match the name of the mod as seen in RimWorld.
 
 ```yaml
 Type: String
-Parameter Sets: ByID
+Parameter Sets: ByPackageID
 Aliases:
 
 Required: True
@@ -63,7 +63,7 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

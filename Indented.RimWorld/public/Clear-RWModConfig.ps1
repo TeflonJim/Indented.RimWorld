@@ -9,10 +9,11 @@
             11/10/2016 - Chris Dent - Created.
     #>
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # Disable-RWMod supports this.
+     # Disable-RWMod supports this.
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')]
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType([System.Void])]
     param ( )
 
-    Get-RWModConfig | Where-Object { $_.Name -ne 'Core' } | Disable-RWMod
+    Get-RWModConfig | Disable-RWMod
 }

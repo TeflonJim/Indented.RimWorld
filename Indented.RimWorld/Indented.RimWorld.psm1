@@ -21,6 +21,7 @@ $public = @(
     'Get-RWVersion'
     'Import-RWModProfile'
     'Open-RWDirectory'
+    'Reset-RWModConfig'
     'Set-RWGamePath'
 )
 
@@ -43,6 +44,7 @@ $functionsToExport = @(
     'Get-RWVersion'
     'Import-RWModProfile'
     'Open-RWDirectory'
+    'Reset-RWModConfig'
     'Set-RWGamePath'
 )
 Export-ModuleMember -Function $functionsToExport

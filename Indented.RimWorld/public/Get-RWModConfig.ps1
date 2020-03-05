@@ -19,11 +19,23 @@ function Get-RWModConfig {
     if (Test-Path $Script:ModConfigPath) {
         $i = 1
         foreach ($mod in [System.Xml.Linq.XDocument]::Load($Script:ModConfigPath).Element('ModsConfigData').Element('activeMods').Elements('li').Value) {
-            $modInformation = Get-RWMod -ID $mod | Add-Member LoadOrder $i -PassThru
+            $modInformation = Get-RWMod -PackageId $mod |
+                Add-Member LoadOrder $i -PassThru |
+                Add-Member -TypeName Indented.RimWorld.ModLoadInformation -PassThru
+            if (-not $modInformation) {
+                $modInformation = [PSCustomObject]@{
+                    Name              = $mod
+                    ID                = $mod
+                    PackageID         = $mod
+                    SupportedVersions = @()
+                    LoadOrder         = $i
+                    PSTypeName        = 'Indented.RimWorld.ModLoadInformation'
+                }
+            }
 
             if ([String]::IsNullOrEmpty($Name) -or $Name.IndexOf('*') -gt -1) {
                 $modInformation
-            } elseif ($modInformation.Name -eq $Name) {
+            } elseif ($modInformation.Name -eq $Name -or $mod -eq $Name) {
                 return $modInformation
             }
             $i++

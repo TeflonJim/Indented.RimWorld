@@ -11,12 +11,12 @@ function Disable-RWMod {
             11/10/2016 - Chris Dent - Created.
     #>
 
-    [CmdletBinding(DefaultParameterSetName = 'ByID', SupportsShouldProcess)]
+    [CmdletBinding(DefaultParameterSetName = 'ByPackageID', SupportsShouldProcess)]
     [OutputType([System.Void])]
     param (
         # The ID of a mod to disable. The ID is the folder name which may match the name of the mod as seen in RimWorld.
-        [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName, ParameterSetName = 'ByID')]
-        [String]$ID,
+        [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName, ParameterSetName = 'ByPackageID')]
+        [String]$PackageID,
 
         # The name of the mod as seen in RimWorld.
         [Parameter(Mandatory, ParameterSetName = 'ByName')]
@@ -27,15 +27,17 @@ function Disable-RWMod {
         if ($pscmdlet.ParameterSetName -eq 'ByName') {
             Get-RWMod -Name $Name | Disable-RWMod
         }
-        if ($pscmdlet.ParameterSetName -eq 'ByID') {
+        if ($pscmdlet.ParameterSetName -eq 'ByPackageID') {
             $content = [XML](Get-Content $Script:ModConfigPath -Raw)
         }
     }
 
     process {
-        if ($pscmdlet.ParameterSetName -eq 'ByID') {
-            if ($pscmdlet.ShouldProcess(('Removing {0} from the active mods list' -f $ID))) {
-                $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $ID)).
+        if ($pscmdlet.ParameterSetName -eq 'ByPackageID') {
+            Write-Verbose ('Removing {0} from the active mods list' -f $PackageID)
+
+            if ($pscmdlet.ShouldProcess(('Removing {0} from the active mods list' -f $PackageID))) {
+                $content.ModsConfigData.activeMods.SelectSingleNode(('./li[.="{0}"]' -f $PackageID)).
                                                    CreateNavigator().
                                                    DeleteSelf()
             }
@@ -43,7 +45,7 @@ function Disable-RWMod {
     }
 
     end {
-        if ($pscmdlet.ParameterSetName -eq 'ByID') {
+        if ($pscmdlet.ParameterSetName -eq 'ByPackageID') {
             $content.Save($Script:ModConfigPath)
         }
     }
