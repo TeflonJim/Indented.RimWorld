@@ -18,6 +18,7 @@ $public = @(
     'Get-RWModConfig'
     'Get-RWModDef'
     'Get-RWModProfile'
+    'Get-RWVersion'
     'Import-RWModProfile'
     'Open-RWDirectory'
     'Set-RWGamePath'
@@ -39,6 +40,7 @@ $functionsToExport = @(
     'Get-RWModConfig'
     'Get-RWModDef'
     'Get-RWModProfile'
+    'Get-RWVersion'
     'Import-RWModProfile'
     'Open-RWDirectory'
     'Set-RWGamePath'
@@ -47,4 +49,3 @@ Export-ModuleMember -Function $functionsToExport
 
 . ("{0}\InitializeModule.ps1" -f $psscriptroot)
 InitializeModule
-

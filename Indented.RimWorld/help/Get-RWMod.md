@@ -17,6 +17,11 @@ Get the mods available to RimWorld.
 Get-RWMod [-ID <String>] [<CommonParameters>]
 ```
 
+### ByPackageID
+```
+Get-RWMod [-PackageID <String>] [<CommonParameters>]
+```
+
 ### ByName
 ```
 Get-RWMod [[-Name] <String>] [<CommonParameters>]
@@ -43,6 +48,21 @@ The ID is the folder name which may match the name of the mod as seen in RimWorl
 ```yaml
 Type: String
 Parameter Sets: ByID
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -PackageID
+The PackageId of a mod.
+
+```yaml
+Type: String
+Parameter Sets: ByPackageID
 Aliases:
 
 Required: False

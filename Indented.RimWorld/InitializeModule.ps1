@@ -47,6 +47,7 @@ function InitializeModule {
     # Cache
 
     $Script:ModSearchCache = @{}
+    $Script:ModPackageIdCache = @{}
 
     # Set-up
 
