@@ -25,6 +25,9 @@ function Get-RWModDef {
         # The def type to find.
         [String]$DefType,
 
+        # Get defs which apply to the specified RimWorld version.
+        [version]$Version,
+
         # Accepts an output pipeline from Get-RWMod.
         [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = 'FromModInformation')]
         [PSTypeName('Indented.RimWorld.ModInformation')]
@@ -43,11 +46,20 @@ function Get-RWModDef {
 
     process {
         if ($pscmdlet.ParameterSetName -eq 'FromModInformation') {
-            $defsPath = Join-Path $ModInformation.Path 'Defs'
-            if ([System.IO.Directory]::Exists($defsPath)) {
-                Get-ChildItem -LiteralPath $defsPath -File -Filter *.xml -Recurse | ForEach-Object {
+            $versionedPath = $null
+            if ($Version) {
+                $versionedPath = Join-Path -Path $ModInformation.Path -ChildPath $Version | Join-Path -ChildPath 'Defs'
+            }
+            if ($versionedPath -and (Test-Path $versionedPath)) {
+                $path = $versionedPath
+            }
+            else {
+                $path = Join-Path -Path $ModInformation.Path -ChildPath 'Defs'
+            }
+
+            if (Test-Path $path) {
+                Get-ChildItem -Path $path -File -Filter *.xml -Recurse | ForEach-Object {
                     $path = $_.FullName
-                    $name = $_.Name
 
                     Write-Verbose -Message ('Reading {0}' -f $path)
 
@@ -73,21 +85,25 @@ function Get-RWModDef {
                         ) | ForEach-Object {
                             if (-not $WarningsOnly) {
                                 $def = [PSCustomObject]@{
-                                    DefName    = $_.Elements().Where( { $_.Name.ToString() -eq 'defName' } ).Value
-                                    DefType    = $_.Name
-                                    ID         = ''
-                                    ModName    = $ModInformation.Name
-                                    Def        = $_ | ConvertFromXElement
-                                    Path       = $path
-                                    XElement   = $_
-                                    IsAbstract = $false
-                                    PSTypeName = 'Indented.RimWorld.DefInformation'
+                                    DefName          = $_.Elements().Where( { $_.Name.ToString() -eq 'defName' } ).Value
+                                    DefType          = $_.Name
+                                    AppliesToVersion = 'Any'
+                                    ID               = ''
+                                    ModName          = $ModInformation.Name
+                                    Def              = $_ | ConvertFromXElement
+                                    Path             = $path
+                                    XElement         = $_
+                                    IsAbstract       = $false
+                                    PSTypeName       = 'Indented.RimWorld.DefInformation'
                                 }
                                 if ($abstract = $_.Attributes().Where( { $_.Name.LocalName -eq 'Abstract' } )) {
                                     $def.IsAbstract = (Get-Variable $abstract.Value).Value
                                     $def.DefName = $_.Attributes().Where( { $_.Name.LocalName -eq 'Name' }).Value
                                 }
                                 $def.ID = '{0}\{1}' -f $def.DefType, $def.DefName
+                                if ($path -match '\\(\d.\d)\\') {
+                                    $def.AppliesToVersion = $matches[1]
+                                }
 
                                 $def
                             }

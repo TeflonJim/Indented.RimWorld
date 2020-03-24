@@ -9,29 +9,40 @@
     [CmdletBinding(DefaultParameterSetName = 'CopyFromMod')]
     [OutputType([System.Xml.Linq.XDocument])]
     param (
+        # The name of the Def which should be copied.
         [Parameter(Mandatory, ParameterSetName = 'CopyFromMod')]
         [String]$Name,
 
+        # The DefType to copy.
         [Parameter(ParameterSetName = 'CopyFromMod')]
         [String]$DefType,
 
+        # The RimWorld version the def exists within.
+        [Parameter(Mandatory, ParameterSetName = 'CopyFromMod')]
+        [Version]$Version,
+
+        # A def as an XML string.
         [Parameter(Mandatory, ParameterSetName = 'CreateFromDef')]
         [String]$Def,
 
+        # The new name of the def.
         [String]$NewName,
 
+        # elements which should be removed from the def.
         [String[]]$Remove,
 
+        # Values which should be updated.
         [Hashtable]$Update,
 
+        # Save the resulting def.
         [ValidateScript( { Test-Path $_ -PathType Leaf } )]
         [String]$SaveAs
     )
 
     if ($pscmdlet.ParameterSetName -eq 'CopyFromMod') {
-        $id = $Name
+        $id = '{0}\{1}' -f $Version, $Name
         if ($DefType) {
-            $id = '{0}\{1}' -f $Name, $DefType
+            $id = '{0}\{1}' -f $id, $DefType
         }
 
         $modName, $defName = $Name -split '[\\/]'
@@ -48,6 +59,7 @@
             $params = @{
                 ModName = $modName
                 DefName = $defName
+                Version = $Version
             }
             if ($DefType) {
                 $params.DefType = $DefType
@@ -62,7 +74,7 @@
             [ArgumentException]::new('Cannot locate source def'),
             'UnknownDef',
             [System.Management.Automation.ErrorCategory]::InvalidArgument,
-            $id
+            $defName
         )
         $pscmdlet.ThrowTerminatingError($errorRecord)
     }

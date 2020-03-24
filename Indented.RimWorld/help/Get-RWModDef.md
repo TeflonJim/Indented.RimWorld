@@ -14,13 +14,14 @@ Get Defs from the mod.
 
 ### ByModName (Default)
 ```
-Get-RWModDef [-ModName] <String> [-DefName <String>] [-DefType <String>] [-WarningsOnly] [<CommonParameters>]
+Get-RWModDef [-ModName] <String> [-DefName <String>] [-DefType <String>] [-Version <Version>] [-WarningsOnly]
+ [<CommonParameters>]
 ```
 
 ### FromModInformation
 ```
-Get-RWModDef [-DefName <String>] [-DefType <String>] -ModInformation <Object> [-WarningsOnly]
- [<CommonParameters>]
+Get-RWModDef [-DefName <String>] [-DefType <String>] [-Version <Version>] -ModInformation <Object>
+ [-WarningsOnly] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -73,6 +74,21 @@ The def type to find.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Version
+Get defs which apply to the specified RimWorld version.
+
+```yaml
+Type: Version
 Parameter Sets: (All)
 Aliases:
 

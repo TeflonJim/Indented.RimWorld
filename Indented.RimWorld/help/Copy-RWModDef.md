@@ -14,8 +14,8 @@ Copies a definition from a mod.
 
 ### CopyFromMod (Default)
 ```
-Copy-RWModDef -Name <String> [-DefType <String>] [-NewName <String>] [-Remove <String[]>] [-Update <Hashtable>]
- [-SaveAs <String>] [<CommonParameters>]
+Copy-RWModDef -Name <String> [-DefType <String>] -Version <Version> [-NewName <String>] [-Remove <String[]>]
+ [-Update <Hashtable>] [-SaveAs <String>] [<CommonParameters>]
 ```
 
 ### CreateFromDef
@@ -39,7 +39,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Name
-{{ Fill Name Description }}
+The name of the Def which should be copied.
 
 ```yaml
 Type: String
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -DefType
-{{ Fill DefType Description }}
+The DefType to copy.
 
 ```yaml
 Type: String
@@ -68,8 +68,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Version
+The RimWorld version the def exists within.
+
+```yaml
+Type: Version
+Parameter Sets: CopyFromMod
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Def
-{{ Fill Def Description }}
+A def as an XML string.
 
 ```yaml
 Type: String
@@ -84,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+The new name of the def.
 
 ```yaml
 Type: String
@@ -99,7 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -Remove
-{{ Fill Remove Description }}
+elements which should be removed from the def.
 
 ```yaml
 Type: String[]
@@ -114,7 +129,7 @@ Accept wildcard characters: False
 ```
 
 ### -Update
-{{ Fill Update Description }}
+Values which should be updated.
 
 ```yaml
 Type: Hashtable
@@ -129,7 +144,7 @@ Accept wildcard characters: False
 ```
 
 ### -SaveAs
-{{ Fill SaveAs Description }}
+Save the resulting def.
 
 ```yaml
 Type: String
