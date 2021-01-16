@@ -12,5 +12,5 @@ function Reset-RWModConfig {
      [OutputType([System.Void])]
      param ( )
 
-     Get-RWModConfig | Where-Object { $_.Name -ne 'Core' } | Disable-RWMod
+     Get-RWModList | Where-Object Name -notin 'Core', 'Royalty' | Disable-RWMod
 }

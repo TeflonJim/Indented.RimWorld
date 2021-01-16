@@ -16,15 +16,15 @@ function Get-RWMod {
     param (
         # The ID of a mod. The ID is the folder name which may match the name of the mod as seen in RimWorld.
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ByID')]
-        [String]$ID,
+        [string]$ID,
 
         # The PackageId of a mod.
         [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'ByPackageID')]
-        [String]$PackageID,
+        [string]$PackageID,
 
         # The name of the mod as seen in RimWorld.
         [Parameter(Position = 1, ParameterSetName = 'ByName')]
-        [String]$Name = '*'
+        [string]$Name = '*'
     )
 
     begin {
@@ -62,8 +62,8 @@ function Get-RWMod {
     process {
         if ($pscmdlet.ParameterSetName -eq 'ByID') {
             if ($psboundparameters.ContainsKey('ID')) {
-                if ([Int32]::TryParse($ID, [Ref]$null)) {
-                    $modPaths = Join-Path $Script:WorkshopModPath $ID
+                if ([long]::TryParse($ID, [ref]$null)) {
+                    $modPaths = Join-Path -Path $Script:WorkshopModPath -ChildPath $ID
                 } else {
                     $modPaths = $Script:GameExpansionPath, $Script:GameModPath |
                         Join-Path -ChildPath { $ID }
@@ -71,14 +71,16 @@ function Get-RWMod {
 
                 foreach ($modPath in $modPaths) {
                     $aboutPath = Join-Path -Path $modPath -ChildPath 'About\about.xml'
+
                     # Test-Path doesn't get on well with some special characters and has no literal path parameter.
                     if (Test-Path -Path $aboutPath) {
                         try {
-                            $xmlDocument = [Xml](Get-Content -Path $aboutPath -Raw)
+                            $xmlDocument = [Xml]::new()
+                            $xmlDocument.Load($aboutPath)
                             $xmlNode = $xmlDocument.ModMetadata
 
                             if ($xmlNode.SelectSingleNode('/*/name')) {
-                                $modName = $xmlNode.name -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?' -replace '^[ \]]+|[ \[-]+$'
+                                $modName = $xmlNode.name # -replace ' *\(?(\[?[ABv]?\d+(\.\d+)*\]?[a-z]*\,?)+\)?' -replace '^[ \]]+|[ \[-]+$' -replace '\p{Pd}', '-'
                             } else {
                                 $modName = $ID
                             }
@@ -92,16 +94,13 @@ function Get-RWMod {
                                 Author            = $xmlNode.author
                                 Description       = $xmlNode.description
                                 URL               = $xmlNode.url
-                                SupportedVersions = $xmlNode.targetVersion
+                                SupportedVersions = $xmlNode.supportedVersions.li
                                 LoadAfter         = $xmlNode.loadAfter.li
                                 LoadBefore        = $xmlNode.loadBefore.li
                                 IncompatibleWith  = $xmlNode.incompatibleWith.li
                                 Dependencies      = $xmlNode.modDependencies.li.packageID
                                 Path              = $modPath
                                 PSTypeName        = 'Indented.RimWorld.ModInformation'
-                            }
-                            if ($xmlNode.SupportedVersions) {
-                                $modMetadata.SupportedVersions = $xmlNode.SupportedVersions.li
                             }
                             foreach ($property in 'ID', 'PackageID', 'LoadAfter', 'LoadBefore', 'Dependencies') {
                                 $modMetadata.$property = foreach ($value in $modMetadata.$property) {
@@ -112,7 +111,8 @@ function Get-RWMod {
                             # Best effort version parser
                             $manifestPath = Join-Path -Path $modPath -ChildPath 'About\Manifest.xml'
                             if (Test-Path -Path $manifestPath) {
-                                $xmlDocument = [Xml](Get-Content -Path $manifestPath -Raw)
+                                $xmlDocument = [Xml]::new()
+                                $xmlDocument.Load($manifestPath)
                                 $modMetadata.Version = $xmlDocument.Manifest.version
                             } else {
                                 $regex = '(?:v(?:ersion:?)? *)?((?:\d+\.){1,}\d+)'

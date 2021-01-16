@@ -4,9 +4,6 @@ function Import-RWModProfile {
         Import a mod profile.
     .DESCRIPTION
         Imports a list of mods into the active mods list. This overwrites any existing mods.
-    .NOTES
-        Change log:
-            11/10/2016 - Chris Dent - Created.
     #>
 
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '')] # All commands used by this support ShouldProcess.
@@ -15,16 +12,16 @@ function Import-RWModProfile {
     param (
         # The name of a profile to import.
         [Parameter(Position = 1, ParameterSetName = 'ByProfileName')]
-        [String]$ProfileName = 'Default',
+        [string]$ProfileName = 'Default',
 
         # The path to a file containing a profile description.
         [Parameter(ParameterSetName = 'FromPath')]
         [ValidateScript( { Test-Path $_ } )]
-        [String]$Path,
+        [string]$Path,
 
         # A list of mods to activate.
         [Parameter(ParameterSetName = 'FromString')]
-        [String]$ModProfile
+        [string]$ModProfile
     )
 
     if ($pscmdlet.ParameterSetName -eq 'ByProfileName') {
@@ -36,7 +33,7 @@ function Import-RWModProfile {
     }
 
     if (-not [String]::IsNullOrEmpty($ModProfile)) {
-        Clear-RWModConfig
+        Clear-RWModList
         $modsToEnable = foreach ($mod in $ModProfile.Split("`r`n", [System.StringSplitOptions]::RemoveEmptyEntries)) {
             $mod = $mod.Trim()
             if ($mod -and -not $mod.StartsWith('#')) {

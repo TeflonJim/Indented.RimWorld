@@ -23,6 +23,6 @@ function Edit-RWModProfile {
         $null = New-Item $path -ItemType File
     }
     if (Test-Path $path) {
-        notepad $path
+        code $path
     }
 }
