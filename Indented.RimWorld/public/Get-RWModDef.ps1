@@ -25,6 +25,9 @@ function Get-RWModDef {
         # The def type to find.
         [String]$DefType,
 
+        # An XPath filter to use to search for Defs.
+        [string]$XPathQuery = '/Defs/*',
+
         # Get defs which apply to the specified RimWorld version.
         [version]$Version,
 
@@ -65,23 +68,26 @@ function Get-RWModDef {
 
                     try {
                         $xDocument = [System.Xml.Linq.XDocument]::Load($path)
-                        if ($DefType) {
-                            $xpathQuery = '/Defs/{0}' -f $DefType
-                        } else {
-                            $xpathQuery = '/Defs/*'
-                        }
-                        if ($DefName) {
-                            $xpathQuery = (@(
-                                '({0}[contains(translate(defName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{1}") or'
-                                'contains(translate(@Name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{1}")])'
-                            ) -join ' ') -f @(
-                                $xPathQuery
-                                $DefName.ToLower()
-                            )
+
+                        if (-not $psboundparameters.ContainsKey('XPathQuery')) {
+                            if ($DefType) {
+                                $XPathQuery = '/Defs/{0}' -f $DefType
+                            } else {
+                                $XPathQuery = '/Defs/*'
+                            }
+                            if ($DefName) {
+                                $XPathQuery = (@(
+                                    '({0}[contains(translate(defName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{1}") or'
+                                    'contains(translate(@Name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "{1}")])'
+                                ) -join ' ') -f @(
+                                    $XPathQuery
+                                    $DefName.ToLower()
+                                )
+                            }
                         }
                         [System.Xml.XPath.Extensions]::XPathSelectElements(
                             $xDocument,
-                            $xpathQuery
+                            $XPathQuery
                         ) | ForEach-Object {
                             if (-not $WarningsOnly) {
                                 $def = [PSCustomObject]@{
