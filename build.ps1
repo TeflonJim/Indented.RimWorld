@@ -10,7 +10,7 @@ function Clean {
 }
 
 function Build {
-    Build-Module -Path (Resolve-Path $PSScriptRoot\*\build.psd1)
+    Build-Module -Path (Resolve-Path $PSScriptRoot\*\build.psd1) -Verbose
 }
 
 function UpdateLocal {

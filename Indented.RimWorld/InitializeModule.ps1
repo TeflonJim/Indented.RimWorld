@@ -1,7 +1,7 @@
 $Script:ModuleConfigPath = [System.IO.Path]::Combine(
     $home,
     'Documents',
-    'WindowsPowerShell',
+    'PowerShell',
     'Config',
     'Indented.Rimworld.config'
 )
@@ -11,7 +11,7 @@ if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam A
 } elseif (Test-Path $configPath) {
     $Script:GamePath = (ConvertFrom-Json (Get-Content $configPath -Raw)).GamePath
 } else {
-    throw 'GamePath is not discoverable and not set. Please set a game path with Set-RWGamePath'
+    Write-Warning 'GamePath is not discoverable and not set. Please set a game path with Set-RWGamePath'
 }
 
 $Script:GameVersion = [Version]((Get-Content (Join-Path $Script:GamePath 'Version.txt') -Raw) -replace ' .+$')

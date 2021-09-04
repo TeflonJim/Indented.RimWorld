@@ -52,11 +52,13 @@ function Get-RWModDef {
             $versionedPath = $null
             if ($Version) {
                 $versionedPath = Join-Path -Path $ModInformation.Path -ChildPath $Version | Join-Path -ChildPath 'Defs'
+                $prefixedVersionedPath = Join-Path -Path $ModInformation.Path -ChildPath ('v{0}' -f $Version) | Join-Path -ChildPath 'Defs'
             }
             if ($versionedPath -and (Test-Path $versionedPath)) {
                 $path = $versionedPath
-            }
-            else {
+            } elseif ($prefixedVersionedPath -and (Test-Path $prefixedVersionedPath)) {
+                $path = $prefixedVersionedPath
+            } else {
                 $path = Join-Path -Path $ModInformation.Path -ChildPath 'Defs'
             }
 

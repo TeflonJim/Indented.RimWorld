@@ -1,7 +1,7 @@
-function Import-RWModProfile {
+function Import-RWModList {
     <#
     .SYNOPSIS
-        Import a mod profile.
+        Import a mod list.
     .DESCRIPTION
         Imports a list of mods into the active mods list. This overwrites any existing mods.
     #>

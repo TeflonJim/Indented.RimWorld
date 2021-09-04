@@ -12,5 +12,17 @@
     [OutputType([void])]
     param ( )
 
-    Get-RWModList | Disable-RWMod
+    $modList = [Xml]::new()
+    $modList.Load($Script:ModListPath)
+
+    if ($pscmdlet.ShouldProcess(('Removing all mods from the active mods list' -f $PackageID))) {
+        if ($modList.ModList.modIds) {
+            $modList.ModList.modIds.RemoveAll()
+        }
+        if ($modList.ModList.modNames) {
+            $modList.ModList.modNames.RemoveAll()
+        }
+    }
+
+    $modList.Save($Script:ModListPath)
 }

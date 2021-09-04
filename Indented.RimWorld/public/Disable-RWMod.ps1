@@ -41,7 +41,7 @@ function Disable-RWMod {
                     CreateNavigator().
                     DeleteSelf()
 
-                $modList.ModList.modNames.SelectSingleNode(('./li[.="{0}"]' -f $rwMod.Name)).
+                $modList.ModList.modNames.SelectSingleNode(('./li[.="{0}"]' -f ($rwMod.Name -replace '"', '\"'))).
                     CreateNavigator().
                     DeleteSelf()
             }

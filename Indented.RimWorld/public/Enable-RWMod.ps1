@@ -79,7 +79,7 @@ function Enable-RWMod {
 
                 if ($LoadOrder -eq 1) {
                     $null = $modNames.InsertBefore($nameNode, $modList.ModList.modNames.SelectSingleNode('(./li)[1]'))
-                } elseif ($predecessor = $modNames.SelectSingleNode(('./li[.="{0}"]' -f $predecessorName))) {
+                } elseif ($predecessor = $modNames.SelectSingleNode(('./li[.="{0}"]' -f ($predecessorName -replace '"', '\"')))) {
                     $null = $modNames.InsertAfter($nameNode, $predecessor)
                 } else {
                     $null = $modNames.AppendChild($nameNode)
