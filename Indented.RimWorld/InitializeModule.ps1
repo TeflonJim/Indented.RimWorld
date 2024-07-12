@@ -1,6 +1,5 @@
 $Script:ModuleConfigPath = [System.IO.Path]::Combine(
-    $home,
-    'Documents',
+    [Environment]::GetFolderPath('MyDocuments'),
     'PowerShell',
     'Config',
     'Indented.Rimworld.config'
@@ -8,8 +7,8 @@ $Script:ModuleConfigPath = [System.IO.Path]::Combine(
 
 if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 294100') {
     $Script:GamePath = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 294100' -Name 'InstallLocation').InstallLocation
-} elseif (Test-Path $configPath) {
-    $Script:GamePath = (ConvertFrom-Json (Get-Content $configPath -Raw)).GamePath
+} elseif (Test-Path $Script:ModuleConfigPath) {
+    $Script:GamePath = (ConvertFrom-Json (Get-Content $Script:ModuleConfigPath -Raw)).GamePath
 } else {
     Write-Warning 'GamePath is not discoverable and not set. Please set a game path with Set-RWGamePath'
 }

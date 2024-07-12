@@ -19,7 +19,7 @@ function UpdateLocal {
         Where-Object { $_.BaseName -eq $_.Directory.Parent.Name } |
         Select-Object -ExpandProperty Directory
 
-    $destination = Join-Path -Path $home -ChildPath 'Documents\PowerShell\Modules' |
+    $destination = Join-Path -Path ([Environment]::GetFolderPath('MyDocuments')) -ChildPath 'PowerShell\Modules' |
         Join-Path -ChildPath $source.Parent.Name
 
     if (-not (Test-Path $destination)) {

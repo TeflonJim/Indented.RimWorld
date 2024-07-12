@@ -1,3 +1,7 @@
+using namespace System.IO
+using namespace System.Xml
+using namespace System.Xml.Linq
+
 function Get-RWModDef {
     <#
     .SYNOPSIS
@@ -69,7 +73,13 @@ function Get-RWModDef {
                     Write-Verbose -Message ('Reading {0}' -f $path)
 
                     try {
-                        $xDocument = [System.Xml.Linq.XDocument]::Load($path)
+                        try {
+                            $xDocument = [XDocument]::Load($path)
+                        } catch [XmlException] {
+                            $xDocument = [XDocument]::Parse(
+                                [File]::ReadAllText($path) -replace '[^\u0001-\u007f]'
+                            )
+                        }
 
                         if (-not $psboundparameters.ContainsKey('XPathQuery')) {
                             if ($DefType) {

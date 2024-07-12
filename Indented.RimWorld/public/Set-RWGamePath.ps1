@@ -22,5 +22,5 @@
     }
     [PSCustomObject]@{
         GamePath = $Path
-    } | ConvertTo-Json | Out-File $Script:ModuleConfigPath -Encoding utf8
+    } | ConvertTo-Json | Set-Content $Script:ModuleConfigPath -Encoding utf8
 }
